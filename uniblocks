@@ -2,8 +2,8 @@
 
 # trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
-. ubServer.sh
-. ubClient.sh
+. ub-server
+. ub-client
 
 while :; do
     wait

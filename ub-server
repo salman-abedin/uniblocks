@@ -4,8 +4,8 @@ echo $$ > "$UNIBLOCKS_PID"
 
 trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v	"volume"' RTMIN+1
 
-. dynamicModules
-. staticModules
+. dynamic_modules
+. static_modules
 
 [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
 mkfifo "$PANEL_FIFO"

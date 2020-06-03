@@ -2,10 +2,10 @@
 
 # Features
    * Can be used with any status bar application
-   * Periodic update
-   * Event based update
+   * Periodic & Event based update
    * Extremely fast (hint: Core Utils & FIFO)
    * Extremely Customizable
+   * Emojis
 
 # Built in modules
    * Date & time
@@ -16,6 +16,8 @@
    * Notification
    * Battery
    * Recording Status
+   * Mail Count
+   * Corona Stats of Bangladesh
 
 # Description
 Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.

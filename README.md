@@ -1,4 +1,11 @@
-### Uniblocks: Universal Status Bar Module
+# Uniblocks: Universal Status Bar Modules
 
-This is a shell script that generates a string of modules defined by the user each of which can be updated both periodically and dynamically.
+Modules produced by this script are updateable can be used with any status bar application out there is this script maintains a client server paradigm, where the server updates the module and the client displays them.
 
+
+# Built in modules
+
+   * Date & time
+   * BSPWM
+   * Volume
+   * Wifi

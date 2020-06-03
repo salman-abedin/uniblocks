@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+battery() {
+   stat="$(cat /sys/class/power_supply/ADP?/online)"
+   [ "$stat" = 1 ] && icon=🔌 || icon=🔋
+   cap="$(cat /sys/class/power_supply/BAT?/capacity)"
+   echo "$icon $cap"
+}
+
+volume() {
+   volstat="$(amixer get Master)"
+   echo "$volstat" | grep -o -m 1 "off" > /dev/null && echo 🔇 ||
+      echo 🔊 "$(echo "$volstat" | grep -o -m 1 "[0-9]\+%")"
+}
+
+notification() { pidof notification-daemon > /dev/null && echo 🔔 || echo 🔕; }
+
+recording() {
+   case "$1" in
+      a) echo "⏺🎙" ;;
+      w) echo "⏺🎥" ;;
+      s) echo "⏺💻" ;;
+      o) echo "" ;;
+   esac
+}
+
+pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
+

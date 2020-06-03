@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+. ubServer.sh
+. ubClient.sh
+
+while :; do
+    wait
+done
+

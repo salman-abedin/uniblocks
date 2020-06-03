@@ -18,6 +18,6 @@
    * Recording Status
 
 # Description
-Modules produced by this script can be used with any status bar application out there is this script maintains a client server paradigm, where the server updates the module and the client displays them.
+Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.
 
 

@@ -40,7 +40,7 @@ coronaStatBangladesh() {
 
    report=$(curl -s https://corona-stats.online/"$country" | grep -i "$country" | sed "s/\s*//g; s/[▲║]//g; s/│/;/g; s/\x1b\[[0-9;]*m//g")
    confirmed=$(echo "$report" | cut -d ';' -f 3)
-   recovered=$(echo "$report" | cut -d ';' -f 4)
+   recovered=$(echo "$report" | cut -d ';' -f 7)
    deaths=$(echo "$report" | cut -d ';' -f 5)
 
    echo "😷 $confirmed 😀 $recovered 💀 $deaths"

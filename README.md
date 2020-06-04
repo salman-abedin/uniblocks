@@ -1,6 +1,6 @@
 # Uniblocks: Universal Status Bar Modules for Unix/Linux
 
-![Uniblocks](https://cloud.disroot.org/apps/files_sharing/publicpreview/Zqk4ZyD3GNPFYyc?x=1366&y=294&a=true&file=uniblocks.png&scalingup=0)
+![Uniblocks](https://cloud.disroot.org/core/preview?fileId=100538021&x=1366&y=768&a=true)
 
 # Features
    * Can be used with any status bar application

@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+[ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
+[ "$REC_PID" ] || export REC_PID=/tmp/recPid
+[  "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
+
 # trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 . ub-server

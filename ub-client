@@ -6,11 +6,12 @@ del="  |  "
 while read -r line; do
    case $line in
       # c*) clk="${line#?}" ;;
+      c*) cor="${line#?}" ;;
       # C*) cal="${line#?}" ;;
       # b*) bat="${line#?}" ;;
       d*) dt="${line#?}" ;;
       # n*) not="${line#?}" ;;
-      # p*) per="${line#?}" ;;
+      p*) per="${line#?}" ;;
       r*) rec="${line#?}" ;;
       # s*) sto="${line#?}" ;;
       w*) wif="${line#?}" ;;
@@ -48,6 +49,6 @@ while read -r line; do
 
    # echo "$wif $del $vol $del $wm $del $dt $rec"
 
-   printf "%s\r" "$wif $del $vol $del $wm $del $dt $rec"
+   printf "%s\r" "$wif $del $vol $del $per $del $wm $del $cor $del $dt $rec"
 
 done < "$PANEL_FIFO" &

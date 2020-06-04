@@ -14,7 +14,9 @@ mkfifo "$PANEL_FIFO"
 pipeDynamic 	d 	"dateTime" 	    1m
 pipeDynamic 	w 	"wifi" 			30
 # pipeDynamic 	s 	"storage" 		1h
-# pipeDynamic 	p 	"performance" 	3s
+pipeDynamic 	p 	"performance" 	3s
+pipeDynamic 	c 	"coronaStatBangladesh" 1d
+
 
 pipeStatic 		v 	"volume"
 # pipeStatic 		n 	"notification"

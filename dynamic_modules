@@ -8,23 +8,23 @@ wifi() {
    echo "🌐 $strength%"
 }
 
-# performance() {
+performance() {
 
-#    cpu="$(top -b -n 1 | awk '(NR==3){
-# 	if( $8 == "id," )
-# 		print "0"
-# 	else
-# 		printf "%d", 100 - $8
-# 	}')"
+   cpu="$(top -b -n 1 | awk '(NR==3){
+	if( $8 == "id," )
+		print "0"
+	else
+		printf "%d", 100 - $8
+	}')"
 
-#    mem="$(free -m | awk '(NR==2){ printf "%d", $3 }')"
-#    # u=M
+   mem="$(free -m | awk '(NR==2){ printf "%d", $3 }')"
+   # u=M
 
-#    temp="$(sensors | awk '(/Core 0/){printf $3}' | sed 's/\.0//; s/+//')"
+   temp="$(sensors | awk '(/Core 0/){printf $3}' | sed 's/\.0//; s/+//')"
 
-#    echo "🌡 $temp   🐎 $cpu%   🧠 $mem"
+   echo "🌡 $temp   🐎 $cpu%   🧠 $mem"
 
-# }
+}
 
 # getStorageInfo(){ df -h "$1" | awk '(NR == 2){print $4}' | sed 's/G//'; }
 # storage(){
@@ -34,7 +34,7 @@ wifi() {
 # }
 
 coronaStatBangladesh() {
-   grep "down" /sys/class/net/wlp2s0/operstate >/dev/null && exit
+   connected || exit
 
    country=${1:-bangladesh}
 

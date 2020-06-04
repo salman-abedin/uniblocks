@@ -22,5 +22,6 @@ pipeStatic 		v 	"volume"
 # pipeStatic 		n 	"notification"
 
 bspc subscribe report > "$PANEL_FIFO" &
+
 # tail -f > "$PANEL_FIFO" &
 

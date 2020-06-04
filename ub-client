@@ -4,6 +4,7 @@ del="  |  "
 # del=`echo '!Y BG 0x00F0000 fg0xFF00ff00 U0xFFAC739 Y! meow'`
 
 while read -r line; do
+
    case $line in
       # c*) clk="${line#?}" ;;
       c*) cor="${line#?}" ;;
@@ -42,13 +43,8 @@ while read -r line; do
 
    esac
 
-   # echo "$wif $del $vol $del $not $del $sto $del $per $del $wm $del $dt $rec"
-   # echo "$bat $del $wif $del $vol $del $not $del $sto $del $wm $del $dt $rec"
-   # echo "$bat $del $wif $del $vol $del $not $del $wm $del $dt $rec"
-   # echo "$bat $del $wif $del $vol $del $wm $del $dt $rec"
-
-   # echo "$wif $del $vol $del $wm $del $dt $rec"
-
-   printf "%s\r" "$wif $del $vol $del $per $del $wm $del $cor $del $dt $rec"
+   printf "%s\r" "$wif $del $vol $del $cor $del $wm $del $per $del $dt $rec"
+   # printf "%s\r" "$wif $del $vol $del $per $del $wm $del $cor $del $dt $rec"
 
 done < "$PANEL_FIFO" &
+

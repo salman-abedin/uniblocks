@@ -3,13 +3,14 @@
 ![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
 
 # Features
-   * Can be used with any status bar application
-   * Periodic & Event based update
-   * Extremely fast (hint: Core Utils & FIFO)
-   * Extremely Customizable
-   * Emojis
+- Can be used with any status bar application
+- Periodic & Event based update
+- Extremely fast (hint: Core Utils & FIFO)
+- Extremely Customizable
+- Emojis
 
 # Built in modules
+
    * Wifi
    * Volume
    * Performance (Temperature, CPU Load & Memory)

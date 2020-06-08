@@ -5,8 +5,8 @@
 # Features
    * Can be used with any status bar application
    * Periodic & Event based update
-   * Extremely fast (hint: Core Utils & FIFO)
-   * Extremely Customizable
+   * Fast! (hint: Core Utils & FIFO)
+   * Extensible & Customizable
    * Emojis
 
 # Built in modules

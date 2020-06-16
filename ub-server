@@ -2,7 +2,9 @@
 
 echo $$ > "$UNIBLOCKS_PID"
 
-trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v	"volume"' RTMIN+1
+trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
+trap 'pipeStatic m "mail"' RTMIN+2
+trap 'pipeStatic n "notification"' RTMIN+3
 
 . dynamic_modules
 . static_modules
@@ -10,18 +12,16 @@ trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v	"volume"' RTMIN+1
 [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
 mkfifo "$PANEL_FIFO"
 
-# pipeDynamic 	b 	"battery" 		5m
-pipeDynamic 	d 	"dateTime" 	    1m
-pipeDynamic 	w 	"wifi" 			30
-# pipeDynamic 	s 	"storage" 		1h
-pipeDynamic 	p 	"performance" 	3s
-pipeDynamic 	c 	"coronaStatBangladesh" 1d
+# pipeDynamic 	c "coronaStatBangladesh" 1d
+pipeDynamic    d "dateTime"    1m
+pipeDynamic    p "performance" 3s
+pipeDynamic    w "wifi"        30
 
-
-pipeStatic 		v 	"volume"
-# pipeStatic 		n 	"notification"
+pipeStatic     v "volume"
+pipeStatic     m "mail"
+pipeStatic     n "notification"
+# pipeStatic     n "notification on"
 
 bspc subscribe report > "$PANEL_FIFO" &
-
 # tail -f > "$PANEL_FIFO" &
 

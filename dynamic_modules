@@ -46,20 +46,7 @@ coronaStatBangladesh() {
    echo "😷 $confirmed 😀 $recovered 💀 $deaths"
 }
 
-
-mail() {
-   connected || exit
-
-   mbsync -c ~/.config/isync/mbsyncrc -a 2>/dev/null
-   unread=$(find ~/.local/share/mail/gmail/INBOX/new/* -type f 2>/dev/null | wc -l)
-   echo "📫  $unread"
-
-   [ "$unread" -gt 0 ] && "$TERMINAL" -e neomutt &
-   # [ $unread -gt 0 ] && notify-send -t 0 -i ~/.icons/system/mail.png "Mail" "You've $unread new mail dude!"
-}
-
 pipeDynamic() { while :; do
    echo "$1""$($2)"
    sleep "$3"
 done > "$PANEL_FIFO" & }
-

@@ -13,7 +13,7 @@ volume() {
       echo 🔊 "$(echo "$volstat" | grep -o -m 1 "[0-9]\+%")"
 }
 
-notification() { pidof notification-daemon > /dev/null && echo 🔔 || echo 🔕; }
+notification() { [ -f "$DONT_DISTURB_MODE" ] && echo 🔕 || echo 🔔; }
 
 recording() {
    case "$1" in
@@ -22,6 +22,13 @@ recording() {
       s) echo "⏺💻" ;;
       o) echo "" ;;
    esac
+}
+
+
+mail() {
+   unread=$(find ~/.local/share/mail/gmail/INBOX/new/* -type f 2> /dev/null |
+      wc -l)
+   echo "📫  $unread"
 }
 
 pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }

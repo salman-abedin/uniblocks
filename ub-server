@@ -20,7 +20,7 @@ generateBlocks(){
    mkfifo "$PANEL_FIFO"
 
    pipeDynamic    d "dateTime"    1m
-   pipeDynamic    p "performance" 1
+   pipeDynamic    p "performance" 3
    pipeDynamic    w "wifi"        30
 
    pipeStatic     v "volume"

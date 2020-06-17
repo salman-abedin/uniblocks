@@ -3,7 +3,10 @@
 trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
 trap 'pipeStatic m "mail"' RTMIN+2
 trap 'pipeStatic n "notification"' RTMIN+3
-trap 'pkill -9 -f ub-server; exec $0' RTMIN+9
+
+trap 'refresh' RTMIN+9
+
+# trap 'pkill -9 -f ub-server; exec $0' RTMIN+9
 # trap 'exec $0' RTMIN+9
 
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
@@ -27,6 +30,15 @@ pipeStatic     m "mail"
 pipeStatic     n "notification"
 
 bspc subscribe report > "$PANEL_FIFO" &
+
+refresh(){
+   # pipeStatic    d "dateTime"
+   # pipeStatic    p "performance"
+   # pipeStatic    w "wifi"
+   pipeStatic    v "volume"
+   pipeStatic    m "mail"
+   pipeStatic    n "notification"
+}
 
 while :; do
     wait

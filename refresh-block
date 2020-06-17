@@ -1,14 +1,3 @@
 #!/usr/bin/env sh
 
-. static_modules
-
-while getopts "mnvr:" opt; do
-   case "$opt" in
-      m) pipeStatic m "mail";;
-      n) pipeStatic n "notification";;
-      v) canberra-gtk-play -i audio-volume-change && pipeStatic v "volume";;
-      # r) pipeStatic r "recording ${OPTARG}";;
-      *) : ;;
-   esac
-done
-
+kill -"$(($1 + 34))" "$(cat "$UNIBLOCKS_PID")"

@@ -3,11 +3,7 @@
 trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
 trap 'pipeStatic m "mail"' RTMIN+2
 trap 'pipeStatic n "notification"' RTMIN+3
-
-trap 'refresh' RTMIN+9
-
-# trap 'pkill -9 -f ub-server; exec $0' RTMIN+9
-# trap 'exec $0' RTMIN+9
+trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
 
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
@@ -18,28 +14,23 @@ echo $$ > "$UNIBLOCKS_PID"
 . dynamic_modules
 . static_modules
 
-[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
-mkfifo "$PANEL_FIFO"
+generateBlocks(){
 
-pipeDynamic    d "dateTime"    1m
-pipeDynamic    p "performance" 3
-pipeDynamic    w "wifi"        30
+   [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+   mkfifo "$PANEL_FIFO"
 
-pipeStatic     v "volume"
-pipeStatic     m "mail"
-pipeStatic     n "notification"
+   pipeDynamic    d "dateTime"    1m
+   pipeDynamic    p "performance" 1
+   pipeDynamic    w "wifi"        30
 
-bspc subscribe report > "$PANEL_FIFO" &
+   pipeStatic     v "volume"
+   pipeStatic     m "mail"
+   pipeStatic     n "notification"
 
-refresh(){
-   # pipeStatic    d "dateTime"
-   # pipeStatic    p "performance"
-   # pipeStatic    w "wifi"
-   pipeStatic    v "volume"
-   pipeStatic    m "mail"
-   pipeStatic    n "notification"
+   bspc subscribe report > "$PANEL_FIFO" &
 }
 
 while :; do
     wait
 done
+

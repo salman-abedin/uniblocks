@@ -3,7 +3,7 @@
 dateTime() { date +'📅  %a, %e %b ⌚ %H : %M'; }
 
 wifi() {
-   connected || echo ❗
+   connected || echo ❗ 000%
    strength="$(awk 'FNR == 3 { printf "%d", $3*100/70 }' /proc/net/wireless)"
    echo "🌐 $strength%"
 }

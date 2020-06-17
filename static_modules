@@ -9,7 +9,7 @@ battery() {
 
 volume() {
    volstat="$(amixer get Master)"
-   echo "$volstat" | grep -o -m 1 "off" > /dev/null && echo 🔇 ||
+   echo "$volstat" | grep -o -m 1 "off" > /dev/null && echo 🔇 000% ||
       echo 🔊 "$(echo "$volstat" | grep -o -m 1 "[0-9]\+%")"
 }
 

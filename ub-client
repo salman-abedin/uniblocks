@@ -47,5 +47,5 @@ while read -r line; do
       "$wif $del $mail $del $not $del $vol $del $wm $del $per $del $dt $rec"
    # printf "%s\r" "$wif $del $vol $del $per $del $wm $del $cor $del $dt $rec"
 
-done < "$PANEL_FIFO" &
+done < "$PANEL_FIFO"
 

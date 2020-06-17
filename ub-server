@@ -1,15 +1,16 @@
 #!/usr/bin/env sh
 
+trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
+trap 'pipeStatic m "mail"' RTMIN+2
+trap 'pipeStatic n "notification"' RTMIN+3
+trap 'pkill -9 -f ub-server; exec $0' RTMIN+9
+# trap 'exec $0' RTMIN+9
+
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
 [  "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
 
 echo $$ > "$UNIBLOCKS_PID"
-
-trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
-trap 'pipeStatic m "mail"' RTMIN+2
-trap 'pipeStatic n "notification"' RTMIN+3
-# trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 . dynamic_modules
 . static_modules
@@ -28,6 +29,5 @@ pipeStatic     n "notification"
 bspc subscribe report > "$PANEL_FIFO" &
 
 while :; do
-   :
-    # wait
+    wait
 done

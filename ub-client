@@ -2,6 +2,9 @@
 
 del="  |  "
 
+# refresh-block 9
+# sleep 1
+
 cat "$PANEL_FIFO" |
    while read -r line; do
 

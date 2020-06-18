@@ -27,8 +27,8 @@ cat "$PANEL_FIFO" |
                case "$item" in
                   [mMfFoOuULG]*)
                      case "$item" in
-                        [FOU]*) name=" 🏚 " ;;
-                        f*) name=" 🕳 " ;;
+                        [FOU]*) name=" 🏚  " ;;
+                        f*) name=" 🕳  " ;;
                         o*) name=" 🌴 " ;;
                         LM | G*?) name="" ;;
                         *) name="" ;;

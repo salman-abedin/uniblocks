@@ -13,7 +13,7 @@ volume() {
       printf "🔊 %03d%%" "$(echo "$volstat" | grep -o -m 1 "[0-9]\+%")"
 }
 
-notification() { [ -f "$DONT_DISTURB_MODE" ] && echo 🔕 || echo 🔔; }
+notification() { [ -s "$DONT_DISTURB_MODE" ] && echo 🔕 || echo 🔔; }
 
 recording() {
    case "$1" in

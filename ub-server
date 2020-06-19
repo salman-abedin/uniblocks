@@ -39,7 +39,9 @@ trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generate_blocks' RTMIN+9
 echo $$ > "$UNIBLOCKS_PID"
 [ -e "$dummy_fifo" ] && rm -f "$dummy_fifo"
 mkfifo "$dummy_fifo"
-wait
+# wait
 while :; do
-    read -r < "$dummy_fifo"
+    # read -r < "$dummy_fifo"
+    : < "$dummy_fifo" &
+    wait $!
 done

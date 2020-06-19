@@ -2,7 +2,7 @@
 
 ![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
 
-# Features
+## Features
 
 -  Can be used with any status bar application
 -  Periodic & Event based update
@@ -10,7 +10,7 @@
 -  Extensible & Customizable
 -  Emojis
 
-# Built in modules
+## Built in modules
 
 -  Wifi
 -  Volume
@@ -23,10 +23,10 @@
 -  Recording Status
 -  Mail Count
 
-# Description
+## Description
 
 Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.
 
-# Usage
+## Usage
 
 Coming soon. lol.

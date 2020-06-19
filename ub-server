@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 
-
 trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
 trap 'pipeStatic m "mail"' RTMIN+2
 trap 'pipeStatic n "notification"' RTMIN+3
@@ -10,34 +9,35 @@ trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
 [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
 
-. dynamic_modules
-. static_modules
-
-pipeDynamic() { while :; do
-   echo "$1""$($2)"
-   sleep "$3"
+pipe_dynamic() { while :; do
+    echo "$1""$($2)"
+    sleep "$3"
 done > "$PANEL_FIFO" & }
 
-pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
+pipe_static() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
 
 generateBlocks() {
-
     [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
     mkfifo "$PANEL_FIFO"
-
-    pipeDynamic d "dateTime" 1m
-    pipeDynamic p "performance" 3
-    pipeDynamic w "wifi" 30
-
-    pipeStatic v "volume"
-    pipeStatic m "mail"
-    pipeStatic n "notification"
-
+    grep -Ev "^#|^$" ~/.config/uniblocksrc |
+        while read -r line; do
+            if [ "$(echo "$line" | cut -d, -f3)" = 0 ]; then
+                pipe_static \
+                    "$(echo "$line" | cut -d, -f1)" \
+                    "$(echo "$line" | cut -d, -f2)" 
+            else
+                pipe_dynamic \
+                    "$(echo "$line" | cut -d, -f1)" \
+                    "$(echo "$line" | cut -d, -f2)" \
+                    "$(echo "$line" | cut -d, -f3)"
+            fi
+        done
     bspc subscribe report > "$PANEL_FIFO" &
 }
 
 echo $$ > "$UNIBLOCKS_PID"
 
 while :; do
+    # sleep 1
     wait
 done

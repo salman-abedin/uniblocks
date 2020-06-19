@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+
 trap 'canberra-gtk-play -i audio-volume-change && pipeStatic v "volume"' RTMIN+1
 trap 'pipeStatic m "mail"' RTMIN+2
 trap 'pipeStatic n "notification"' RTMIN+3
@@ -9,17 +10,15 @@ trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
 [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
 
-echo $$ > "$UNIBLOCKS_PID"
-
 . dynamic_modules
 . static_modules
 
-# pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
+pipeDynamic() { while :; do
+   echo "$1""$($2)"
+   sleep "$3"
+done > "$PANEL_FIFO" & }
 
-# pipeDynamic() { while :; do
-#     echo "$1""$($2)"
-#     sleep "$3"
-# done > "$PANEL_FIFO" & }
+pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
 
 generateBlocks() {
 
@@ -36,6 +35,8 @@ generateBlocks() {
 
     bspc subscribe report > "$PANEL_FIFO" &
 }
+
+echo $$ > "$UNIBLOCKS_PID"
 
 while :; do
     wait

@@ -1,14 +1,8 @@
 #!/usr/bin/env sh
 
-trap 'canberra-gtk-play -i audio-volume-change && pipe_static v "volume"' RTMIN+1
-trap 'pipe_static m "mailbox"' RTMIN+2
-trap 'pipe_static n "noti-stat"' RTMIN+3
-trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generate_blocks' RTMIN+9
-
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
 [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
-
 dummy_fifo=/tmp/dff
 
 pipe_dynamic() { while :; do
@@ -36,6 +30,11 @@ generate_blocks() {
         done
     bspc subscribe report > "$PANEL_FIFO" &
 }
+
+trap 'canberra-gtk-play -i audio-volume-change && pipe_static v "volume"' RTMIN+1
+trap 'pipe_static m "mailbox"' RTMIN+2
+trap 'pipe_static n "noti-stat"' RTMIN+3
+trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generate_blocks' RTMIN+9
 
 echo $$ > "$UNIBLOCKS_PID"
 [ -e "$dummy_fifo" ] && rm -f "$dummy_fifo"

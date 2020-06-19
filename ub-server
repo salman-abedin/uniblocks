@@ -7,30 +7,36 @@ trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
 
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
-[  "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
+[ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
 
 echo $$ > "$UNIBLOCKS_PID"
 
 . dynamic_modules
 . static_modules
 
-generateBlocks(){
+# pipeStatic() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
 
-   [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
-   mkfifo "$PANEL_FIFO"
+# pipeDynamic() { while :; do
+#     echo "$1""$($2)"
+#     sleep "$3"
+# done > "$PANEL_FIFO" & }
 
-   pipeDynamic    d "dateTime"    1m
-   pipeDynamic    p "performance" 3
-   pipeDynamic    w "wifi"        30
+generateBlocks() {
 
-   pipeStatic     v "volume"
-   pipeStatic     m "mail"
-   pipeStatic     n "notification"
+    [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+    mkfifo "$PANEL_FIFO"
 
-   bspc subscribe report > "$PANEL_FIFO" &
+    pipeDynamic d "dateTime" 1m
+    pipeDynamic p "performance" 3
+    pipeDynamic w "wifi" 30
+
+    pipeStatic v "volume"
+    pipeStatic m "mail"
+    pipeStatic n "notification"
+
+    bspc subscribe report > "$PANEL_FIFO" &
 }
 
 while :; do
     wait
 done
-

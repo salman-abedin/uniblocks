@@ -1,4 +1,4 @@
-# Uniblocks: Universal Status Bar Modules for Unix/Linux
+# Uniblocks: Universal Status Bar Modules for Unix
 
 ![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
 

@@ -14,7 +14,6 @@
 
 Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.
 
-
 ## Installation
 
 ```sh
@@ -25,3 +24,9 @@ sudo make install
 ## Usage
 
 Coming soon. lol.
+
+## Uninstallation
+
+```sh
+sudo make uninstall
+```

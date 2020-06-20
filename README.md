@@ -14,6 +14,14 @@
 
 Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.
 
+
+## Installation
+
+```sh
+git clone git@github.com:salman-abedin/uniblocks.git
+sudo make install
+```
+
 ## Usage
 
 Coming soon. lol.

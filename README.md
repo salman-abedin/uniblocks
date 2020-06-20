@@ -17,7 +17,7 @@ Modules produced by this script can be used with any status bar application out 
 ## Installation
 
 ```sh
-git clone git@github.com:salman-abedin/uniblocks.git
+git clone https://github.com/salman-abedin/uniblocks.git
 sudo make install
 ```
 

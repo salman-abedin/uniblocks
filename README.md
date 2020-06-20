@@ -6,7 +6,7 @@
 
 -  Can be used with any status bar application
 -  Periodic & Event based update
--  Fast! (hint: Core Utils & FIFO)
+-  Light & Fast (hint: Core Utils & FIFO)
 -  Extensible & Customizable
 -  Emojis
 

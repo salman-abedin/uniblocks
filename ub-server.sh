@@ -43,5 +43,5 @@ mkfifo "$dummy_fifo"
 while :; do
     # read -r < "$dummy_fifo"
     : < "$dummy_fifo" &
-    wait $!
+    wait
 done

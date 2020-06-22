@@ -3,7 +3,7 @@
 [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
 [ "$REC_PID" ] || export REC_PID=/tmp/recPid
 [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
-dummy_fifo=/tmp/dff
+DUMMYFIFO=/tmp/dff
 
 pipeToFifo() {
     if [ "$3" = 0 ]; then
@@ -16,7 +16,7 @@ pipeToFifo() {
     fi
 }
 
-generate_blocks() {
+generateBlocks() {
     [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
     mkfifo "$PANEL_FIFO"
     grep -Ev "^#|^$" ~/.config/uniblocksrc |
@@ -30,17 +30,17 @@ generate_blocks() {
     bspc subscribe report > "$PANEL_FIFO" &
 }
 
-trap 'canberra-gtk-play -i audio-volume-change && pipe_static v "volume"' RTMIN+1
-trap 'pipe_static m "mailbox"' RTMIN+2
-trap 'pipe_static n "noti-stat"' RTMIN+3
-trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generate_blocks' RTMIN+9
+trap 'canberra-gtk-play -i audio-volume-change && pipeToFifo v "volume" 0' RTMIN+1
+trap 'pipeToFifo m "mailbox" 0' RTMIN+2
+trap 'pipeToFifo n "noti-stat" 0' RTMIN+3
+trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
 
 echo $$ > "$UNIBLOCKS_PID"
-[ -e "$dummy_fifo" ] && rm -f "$dummy_fifo"
-mkfifo "$dummy_fifo"
+[ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"
+mkfifo "$DUMMYFIFO"
 # wait
 while :; do
-    # read -r < "$dummy_fifo"
-    : < "$dummy_fifo" &
+    # read -r < "$DUMMYFIFO"
+    : < "$DUMMYFIFO" &
     wait
 done

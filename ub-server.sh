@@ -5,29 +5,28 @@
 [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
 dummy_fifo=/tmp/dff
 
-pipe_dynamic() { while :; do
-    echo "$1""$($2)"
-    sleep "$3"
-done > "$PANEL_FIFO" & }
-
-pipe_static() { echo "$1""$("$2")" > "$PANEL_FIFO" & }
+pipeToFifo() {
+    if [ "$3" = 0 ]; then
+        echo "$1""$("$2")" > "$PANEL_FIFO" &
+    else
+        while :; do
+            echo "$1""$($2)"
+            sleep "$3"
+        done > "$PANEL_FIFO" &
+    fi
+}
 
 generate_blocks() {
     [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
     mkfifo "$PANEL_FIFO"
     grep -Ev "^#|^$" ~/.config/uniblocksrc |
         while read -r line; do
-            if [ "$(echo "$line" | cut -d, -f3)" = 0 ]; then
-                pipe_static \
-                    "$(echo "$line" | cut -d, -f1)" \
-                    "$(echo "$line" | cut -d, -f2)"
-            else
-                pipe_dynamic \
-                    "$(echo "$line" | cut -d, -f1)" \
-                    "$(echo "$line" | cut -d, -f2)" \
-                    "$(echo "$line" | cut -d, -f3)"
-            fi
+            pipeToFifo \
+                "$(echo "$line" | cut -d, -f1)" \
+                "$(echo "$line" | cut -d, -f2)" \
+                "$(echo "$line" | cut -d, -f3)"
         done
+
     bspc subscribe report > "$PANEL_FIFO" &
 }
 

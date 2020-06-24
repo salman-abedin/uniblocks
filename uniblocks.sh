@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
+[ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
+
 case $1 in
     --server)
-        [ "$PANEL_FIFO" ] || export PANEL_FIFO=/tmp/panelFifo
         [ "$UNIBLOCKS_PID" ] || export UNIBLOCKS_PID=/tmp/ubPid
         DUMMYFIFO=/tmp/dff
-
         pipeToFifo() {
             if [ "$3" = 0 ]; then
                 echo "$1""$("$2")" > "$PANEL_FIFO" &
@@ -16,7 +16,6 @@ case $1 in
                 done > "$PANEL_FIFO" &
             fi
         }
-
         generateBlocks() {
             [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
             mkfifo "$PANEL_FIFO"
@@ -30,7 +29,6 @@ case $1 in
 
             bspc subscribe report > "$PANEL_FIFO" &
         }
-
         trap 'canberra-gtk-play -i audio-volume-change && pipeToFifo v "volume" 0' RTMIN+1
         trap 'pipeToFifo m "mailbox" 0' RTMIN+2
         trap 'pipeToFifo n "noti-stat" 0' RTMIN+3
@@ -47,29 +45,11 @@ case $1 in
         ;;
     --client)
         del="  |  "
-        # status=""
-
         refresh-block 9
         sleep 1
-
         while read -r line; do
-
-            # grep -Ev "^#|^$" ~/.config/uniblocksrc |
-            #     while read -r line; do
-            #         if [ "$(echo "$line" | cut -d, -f3)" = 0 ]; then
-            #             pipe_static \
-            #                 "$(echo "$line" | cut -d, -f1)" \
-            #                 "$(echo "$line" | cut -d, -f2)"
-            #         else
-            #             pipe_dynamic \
-            #                 "$(echo "$line" | cut -d, -f1)" \
-            #                 "$(echo "$line" | cut -d, -f2)" \
-            #                 "$(echo "$line" | cut -d, -f3)"
-            #         fi
-            #     done
-
+            # keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
             case $line in
-
                 d*) dt="${line#?}" ;;
                 m*) mail="${line#?}" ;;
                 n*) not="${line#?}" ;;
@@ -100,14 +80,10 @@ case $1 in
                         shift
                     done
                     ;;
-
             esac
-
             # [ "$1" = wif ] && refresh-block <SIG> && echo "$wif" && exit
-
             printf "%s\r" \
                 "$wif $del $mail $del $not $del $vol $del $wm $del $sys $del $dt $rec"
-
         done < "$PANEL_FIFO"
         ;;
     *) : ;;

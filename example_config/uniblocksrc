@@ -1,0 +1,12 @@
+# Uniblocks configuration
+
+# Id,Script,Interval,Signal
+
+v,volume,0,1
+m,mailbox,0,2
+n,noti-stat,0,3
+
+d,date-time,1m
+w,wifi,30s
+s,sys-stat,3s
+

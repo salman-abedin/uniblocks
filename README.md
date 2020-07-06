@@ -8,7 +8,6 @@
 -  Periodic & Event based update
 -  Light & Fast (hint: Core Utils & FIFO)
 -  Extensible & Customizable
--  Emojis
 
 ## Description
 

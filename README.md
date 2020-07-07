@@ -6,8 +6,8 @@
 
 -  Can be used with any status bar application
 -  Periodic & Event based update
--  Light & Fast (hint: Core Utils & FIFO)
 -  Extensible & Customizable
+-  Runs as fast as it gets! (hint: POSIX compliant shellscript)
 
 ## Description
 

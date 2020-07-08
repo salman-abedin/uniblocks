@@ -6,7 +6,7 @@ case $1 in
     --server)
         [ "$UBPID" ] || export UBPID=/tmp/ubPid
         DUMMYFIFO=/tmp/dff
-        pipeToFifo() {
+        pipetofifo() {
             if [ "$3" = 0 ]; then
                 echo "$1""$("$2")" > "$PANELFIFO" &
             else
@@ -16,12 +16,12 @@ case $1 in
                 done > "$PANELFIFO" &
             fi
         }
-        generateBlocks() {
+        generateblocks() {
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
             grep -Ev "^#|^$" ~/.config/uniblocksrc |
                 while read -r line; do
-                    pipeToFifo \
+                    pipetofifo \
                         "$(echo "$line" | cut -d, -f1)" \
                         "$(echo "$line" | cut -d, -f2)" \
                         "$(echo "$line" | cut -d, -f3)"
@@ -29,10 +29,10 @@ case $1 in
 
             bspc subscribe report > "$PANELFIFO" &
         }
-        trap 'canberra-gtk-play -i audio-volume-change && pipeToFifo v "volume" 0' RTMIN+1
-        trap 'pipeToFifo m "mailbox" 0' RTMIN+2
-        trap 'pipeToFifo n "noti-stat" 0' RTMIN+3
-        trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateBlocks' RTMIN+9
+        trap 'canberra-gtk-play -i audio-volume-change && pipetofifo v "volume" 0' RTMIN+1
+        trap 'pipetofifo m "mailbox" 0' RTMIN+2
+        trap 'pipetofifo n "noti-stat" 0' RTMIN+3
+        trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+9
 
         echo $$ > "$UBPID"
         [ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"

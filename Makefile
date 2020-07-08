@@ -2,9 +2,9 @@ PREFIX = /usr/local
 install:
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@for e in *.sh; do \
-		cp -f $$e ${DESTDIR}${PREFIX}/bin; \
-		chmod 755 ${DESTDIR}${PREFIX}/bin/$$e; \
-		mv ${DESTDIR}${PREFIX}/bin/$$e ${DESTDIR}${PREFIX}/bin/$${e%.*}; \
+		cp $$e $${e%.*}; \
+		chmod 755 $${e%.*}; \
+		mv $${e%.*} ${DESTDIR}${PREFIX}/bin; \
 		done
 	@echo Done installing executable files to ${DESTDIR}${PREFIX}/bin
 uninstall:

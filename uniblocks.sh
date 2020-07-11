@@ -30,7 +30,7 @@ case $1 in
             bspc subscribe report > "$PANELFIFO" &
         }
         trap 'canberra-gtk-play -i audio-volume-change && pipetofifo v "volume" 0' RTMIN+1
-        trap 'pipetofifo m "mailbox" 0' RTMIN+2
+        # trap 'pipetofifo m "mailbox" 0' RTMIN+2
         trap 'pipetofifo n "noti-stat" 0' RTMIN+3
         trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+9
 
@@ -51,7 +51,7 @@ case $1 in
             # keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
             case $line in
                 d*) dt="${line#?}" ;;
-                m*) mail="${line#?}" ;;
+                # m*) mail="${line#?}" ;;
                 n*) not="${line#?}" ;;
                 r*) rec="${line#?}" ;;
                 s*) sys="${line#?}" ;;
@@ -83,7 +83,7 @@ case $1 in
             esac
             # [ "$1" = wif ] && refresh-block <SIG> && echo "$wif" && exit
             printf "%s\r" \
-                "$wif $del $mail $del $not $del $vol $del $wm $del $sys $del $dt $rec"
+                "$wif $del $not $del $vol $del $wm $del $sys $del $dt $rec"
         done < "$PANELFIFO"
         ;;
     *) : ;;

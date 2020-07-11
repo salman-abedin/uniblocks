@@ -58,7 +58,6 @@ case $1 in
                 s*) sys="${line#?}" ;;
                 v*) vol="${line#?}" ;;
                 w*) wif="${line#?}" ;;
-
                 W*)
                     wm=
                     IFS=':'

@@ -87,7 +87,17 @@ case $1 in
         done < "$PANELFIFO"
         ;;
     refresh | -r)
-        :
+        line=$(grep "^$2" ~/.config/uniblocksrc)
+
+        echo "${line%%,*}"
+        echo "${line#*,%,*}"
+        echo "${line##*,}"
+
+        # pipetofifo \
+        #     "$(echo "$line" | cut -d, -f1)" \
+        #     "$(echo "$line" | cut -d, -f2)" \
+        #     "$(echo "$line" | cut -d, -f3)"
+
         ;;
     *) : ;;
 esac

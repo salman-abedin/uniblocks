@@ -2,20 +2,21 @@
 
 [ "$PANELFIFO" ] || export PANELFIFO=/tmp/panelFifo
 
+pipetofifo() {
+    if [ "$3" = 0 ]; then
+        echo "$1""$("$2")" > "$PANELFIFO" &
+    else
+        while :; do
+            echo "$1""$($2)"
+            sleep "$3"
+        done > "$PANELFIFO" &
+    fi
+}
+
 case $1 in
     --server)
         [ "$UBPID" ] || export UBPID=/tmp/ubPid
         DUMMYFIFO=/tmp/dff
-        pipetofifo() {
-            if [ "$3" = 0 ]; then
-                echo "$1""$("$2")" > "$PANELFIFO" &
-            else
-                while :; do
-                    echo "$1""$($2)"
-                    sleep "$3"
-                done > "$PANELFIFO" &
-            fi
-        }
         generateblocks() {
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
@@ -85,6 +86,9 @@ case $1 in
             printf "%s\r" \
                 "$wif $del $not $del $vol $del $wm $del $sys $del $dt $rec"
         done < "$PANELFIFO"
+        ;;
+    refresh | -r)
+        :
         ;;
     *) : ;;
 esac

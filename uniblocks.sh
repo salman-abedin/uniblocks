@@ -3,12 +3,6 @@
 [ "$PANELFIFO" ] || export PANELFIFO=/tmp/panel_fifo
 [ "$UBPID" ] || export UBPID=/tmp/ub_pid
 
-parseout() {
-    while read -r line; do
-        key=${line%%,*}
-    done < /dev/stdin
-}
-
 parse() {
     while read -r line; do
         sstring=${line#*,}
@@ -37,7 +31,6 @@ case $1 in
             grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
             # bspc subscribe report > "$PANELFIFO" &
         }
-        # trap 'canberra-gtk-play -i audio-volume-change && parse v "volume" 0' RTMIN+1
         trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
         echo $$ > "$UBPID"
@@ -54,39 +47,49 @@ case $1 in
         sleep 1
         while read -r line; do
 
-            # keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
+            keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
 
-            case $line in
-                d*) dt="${line#?}" ;;
-                n*) not="${line#?}" ;;
-                s*) sys="${line#?}" ;;
-                v*) vol="${line#?}" ;;
-                w*) wif="${line#?}" ;;
-                W*)
-                    wm=
-                    IFS=':'
-                    set -- ${line#?}
-                    while [ "$#" -gt 0 ]; do
-                        item="$1"
-                        name="${item#?}"
-                        case "$item" in
-                            [mMfFoOuULG]*)
-                                case "$item" in
-                                    [FOU]*) name=" 🏚  " ;;
-                                    f*) name=" 🕳  " ;;
-                                    o*) name=" 🌴 " ;;
-                                    LM | G*?) name="" ;;
-                                    *) name="" ;;
-                                esac
-                                wm="${wm} ${name}"
-                                ;;
-                        esac
-                        shift
-                    done
-                    ;;
-            esac
-            printf "%s\r" \
-                "$wif $del $not $del $vol $del $wm $del $sys $del $dt $rec"
+            # # TODO
+            # grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1 |
+            #     while read -r key; do
+            #         case $line in
+            #             $key*) status="$status $del ${line#?}" ;;
+            #         esac
+            #     done
+            # # module=$(echo "$line" | grep "$key.*")
+            # # status="$status $del ${module#?}"
+
+            # case $line in
+            #     d*) dt="${line#?}" ;;
+            #     n*) not="${line#?}" ;;
+            #     s*) sys="${line#?}" ;;
+            #     v*) vol="${line#?}" ;;
+            #     w*) wif="${line#?}" ;;
+            #     W*)
+            #         wm=
+            #         IFS=':'
+            #         set -- ${line#?}
+            #         while [ "$#" -gt 0 ]; do
+            #             item="$1"
+            #             name="${item#?}"
+            #             case "$item" in
+            #                 [mMfFoOuULG]*)
+            #                     case "$item" in
+            #                         [FOU]*) name=" 🏚  " ;;
+            #                         f*) name=" 🕳  " ;;
+            #                         o*) name=" 🌴 " ;;
+            #                         LM | G*?) name="" ;;
+            #                         *) name="" ;;
+            #                     esac
+            #                     wm="${wm} ${name}"
+            #                     ;;
+            #             esac
+            #             shift
+            #         done
+            #         ;;
+            # esac
+            # printf "%s\r" \
+            #     "$wif $del $not $del $vol $del $wm $del $sys $del $dt"
 
         done < "$PANELFIFO"
         ;;

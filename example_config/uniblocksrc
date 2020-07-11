@@ -2,9 +2,10 @@
 
 # Id,Script,Interval,Signal
 
-v,volume,0,1
+W,bspc subscribe report,0
+v,volume,0
 # m,mailbox,0,2
-n,noti-stat,0,3
+n,noti-stat,0
 
 d,date-time,1m
 w,wifi,30s

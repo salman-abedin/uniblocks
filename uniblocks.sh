@@ -1,60 +1,64 @@
 #!/usr/bin/env sh
 
-[ "$PANELFIFO" ] || export PANELFIFO=/tmp/panelFifo
+[ "$PANELFIFO" ] || export PANELFIFO=/tmp/panel_fifo
+[ "$UBPID" ] || export UBPID=/tmp/ub_pid
 
-pipetofifo() {
-    if [ "$3" = 0 ]; then
-        echo "$1""$("$2")" > "$PANELFIFO" &
-    else
-        while :; do
-            echo "$1""$($2)"
-            sleep "$3"
-        done > "$PANELFIFO" &
-    fi
+parseout() {
+    while read -r line; do
+        key=${line%%,*}
+    done < /dev/stdin
+}
+
+parse() {
+    while read -r line; do
+        sstring=${line#*,}
+        key=${line%%,*}
+        script=${sstring%,*}
+        interval=${line##*,}
+        if [ "$key" = W ]; then
+            bspc subscribe report > "$PANELFIFO" &
+        elif [ "$interval" = 0 ]; then
+            echo "$key""$("$script")" > "$PANELFIFO" &
+        else
+            while :; do
+                echo "$key""$($script)"
+                sleep "$interval"
+            done > "$PANELFIFO" &
+        fi
+    done < /dev/stdin
 }
 
 case $1 in
     --server)
-        [ "$UBPID" ] || export UBPID=/tmp/ubPid
         DUMMYFIFO=/tmp/dff
         generateblocks() {
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
-            grep -Ev "^#|^$" ~/.config/uniblocksrc |
-                while read -r line; do
-                    pipetofifo \
-                        "$(echo "$line" | cut -d, -f1)" \
-                        "$(echo "$line" | cut -d, -f2)" \
-                        "$(echo "$line" | cut -d, -f3)"
-                done
-
-            bspc subscribe report > "$PANELFIFO" &
+            grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
+            # bspc subscribe report > "$PANELFIFO" &
         }
-        trap 'canberra-gtk-play -i audio-volume-change && pipetofifo v "volume" 0' RTMIN+1
-        # trap 'pipetofifo m "mailbox" 0' RTMIN+2
-        trap 'pipetofifo n "noti-stat" 0' RTMIN+3
-        trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+9
+        # trap 'canberra-gtk-play -i audio-volume-change && parse v "volume" 0' RTMIN+1
+        trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
         echo $$ > "$UBPID"
         [ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"
         mkfifo "$DUMMYFIFO"
         while :; do
-            # read -r < "$DUMMYFIFO"
             : < "$DUMMYFIFO" &
             wait
         done
         ;;
     --client)
         del="  |  "
-        refresh-block 9
+        kill -35 "$(cat "$UBPID")"
         sleep 1
         while read -r line; do
+
             # keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
+
             case $line in
                 d*) dt="${line#?}" ;;
-                # m*) mail="${line#?}" ;;
                 n*) not="${line#?}" ;;
-                r*) rec="${line#?}" ;;
                 s*) sys="${line#?}" ;;
                 v*) vol="${line#?}" ;;
                 w*) wif="${line#?}" ;;
@@ -81,23 +85,11 @@ case $1 in
                     done
                     ;;
             esac
-            # [ "$1" = wif ] && refresh-block <SIG> && echo "$wif" && exit
             printf "%s\r" \
                 "$wif $del $not $del $vol $del $wm $del $sys $del $dt $rec"
+
         done < "$PANELFIFO"
         ;;
-    refresh | -r)
-        line=$(grep "^$2" ~/.config/uniblocksrc)
-
-        echo "${line%%,*}"
-        echo "${line#*,%,*}"
-        echo "${line##*,}"
-
-        # pipetofifo \
-        #     "$(echo "$line" | cut -d, -f1)" \
-        #     "$(echo "$line" | cut -d, -f2)" \
-        #     "$(echo "$line" | cut -d, -f3)"
-
-        ;;
-    *) : ;;
+    refresh | -r) grep "^$2" ~/.config/uniblocksrc | parse ;;
+    *) exit 1 ;;
 esac

@@ -2,7 +2,7 @@
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
-DEL=" | "
+DEL="|"
 
 parse() {
     while read -r line; do
@@ -26,11 +26,10 @@ parse() {
 case $1 in
     --server | -s)
         DUMMYFIFO=/tmp/dff
-
+        pgrep -f "$0 --server" | grep -v $$ | xargs kill -9 2> /dev/null
         [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
         mkfifo "$PANELFIFO"
         grep -Ev "^#|^$" $CONFIG | parse
-
         [ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"
         mkfifo "$DUMMYFIFO"
         while :; do
@@ -58,6 +57,6 @@ case $1 in
             fi
         done < "$PANELFIFO"
         ;;
-    --update | -u) grep "^$2" $CONFIG | parse ;;
+    --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
     *) exit 1 ;;
 esac

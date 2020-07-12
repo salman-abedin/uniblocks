@@ -1,4 +1,4 @@
-# Uniblocks: Universal Status Bar Modules for Unix
+# Uniblocks: Universal updatable status bar modules generator
 
 ![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
 

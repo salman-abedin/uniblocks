@@ -2,7 +2,7 @@
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
-DEL=" | "
+DEL="  |  "
 
 #---------------------------------------
 # Used for parsing modules into the fifo

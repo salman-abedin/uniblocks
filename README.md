@@ -47,8 +47,8 @@ sudo make uninstall
 
 ## Repos you might be interested in
 
-[alfred/panel.sh](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
-: Collection of statusbar modules
+[Alfred/panel.sh](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
+: The status bar modules
 
 [Bolt](https://github.com/salman-abedin/bolt)
 : The lightning fast workflow creator

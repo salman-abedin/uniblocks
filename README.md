@@ -8,7 +8,7 @@
 
 -  The modules can be used with any status bar application
 -  Updating is possible both periodically and manually
--  Runs as fast as it gets (hint: POSIX compliant shellscript)
+-  Runs as fast as it gets. (hint: POSIX compliant shellscript)
 
 ## Dependencies
 

@@ -25,17 +25,17 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
    Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
--  run `uniblocks --server` to launch the server (preferably on startup)
+-  run `uniblocks --server,-s` to launch the server (preferably on startup)
 
--  run `uniblocks --client` to generate the status string
+-  run `uniblocks --client,-c` to generate the status string
 
    -  Modules are ordered according to the order in the **config**
 
--  run `uniblocks --client <TAG>` to generate individual modules
+-  run `uniblocks --client,-c <TAG>` to generate individual modules
 
    -  This will be useful in order to integrate your updatable modules with a status bar applications
 
--  run `uniblocks --update <TAG>` to update individual modules
+-  run `uniblocks --update,-u <TAG>` to update individual modules
 
 ## Uninstallation
 

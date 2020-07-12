@@ -7,9 +7,12 @@
 ## Features
 
 -  Can be used with any status bar application
--  Periodic & Event based update
--  Extensible & Customizable
+-  Periodic & event based update
 -  Runs as fast as it gets! (hint: POSIX compliant shellscript)
+
+## Dependencies
+
+-  sed, grep, pgrep, xargs, cat, mkfifo
 
 ## Installation
 

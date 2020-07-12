@@ -2,8 +2,6 @@
 
 ![](preview.gif)
 
-![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
-
 ## Features
 
 -  The modules can be used with any status bar application

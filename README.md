@@ -20,13 +20,17 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 ## Usage
 
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
-   Here is an [examples](https://github.com/salman-abedin/bolt/tree/master/example_config)
+   Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
--  run `uniblocks --server` to launch the server
+-  run `uniblocks --server` to launch the server (preferably on startup)
 
--  run `uniblocks --client` to generate the status string according to the order of the config
+-  run `uniblocks --client` to generate the status string
+
+   -  Modules are ordered according to the order in the **config**
 
 -  run `uniblocks --client <TAG>` to generate individual modules
+
+   -  This will be useful in order to integrate your updatable modules with any status bar applications
 
 -  run `uniblocks --update <TAG>` to update individual modules
 

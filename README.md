@@ -39,3 +39,26 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 ```sh
 sudo make uninstall
 ```
+
+---
+
+## Repos you might be interested in
+
+[Bolt](https://github.com/salman-abedin/bolt)
+: The lightning fast workflow creator
+
+[Crystal](https://github.com/salman-abedin/crystal)
+: The transparent setup
+
+[Magpie](https://github.com/salman-abedin/magpie)
+: The dotfiles
+
+[Alfred](https://github.com/salman-abedin/alfred)
+: The scripts
+
+[Devour](https://github.com/salman-abedin/devour)
+: Terminal swallowing
+
+## Contact
+
+SalmanAbedin@disroot.org

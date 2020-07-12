@@ -33,7 +33,7 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 
 -  run `uniblocks --client <TAG>` to generate individual modules
 
-   -  This will be useful in order to integrate your updatable modules with any status bar applications
+   -  This will be useful in order to integrate your updatable modules with a status bar applications
 
 -  run `uniblocks --update <TAG>` to update individual modules
 

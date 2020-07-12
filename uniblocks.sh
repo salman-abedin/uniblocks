@@ -4,6 +4,9 @@ PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
 DEL=" | "
 
+#---------------------------------------
+# Used for parsing in modules into the fifo
+#---------------------------------------
 parse() {
     while read -r line; do
         sstring=${line#*,}
@@ -40,17 +43,23 @@ case $1 in
         ;;
     --client | -c)
         while read -r line; do
-            tags=$(grep -Ev "^#|^$" $CONFIG | cut -d, -f1)
-            for tag in $tags; do
+            TAGS=$(grep -Ev "^#|^$" $CONFIG | cut -d, -f1)
+            #---------------------------------------
+            # Parse out the moudles from the fifo
+            #---------------------------------------
+            for tag in $TAGS; do
                 case $line in
                     $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
             done
+            #---------------------------------------
+            # Print the modules
+            #---------------------------------------
             if [ "$2" ]; then
                 printf "%s\r" "$(cat /tmp/"$2")"
             else
                 status=
-                for tag in $tags; do
+                for tag in $TAGS; do
                     ! [ "$status" ] && status="$(cat /tmp/"$tag")" && continue
                     status="$status $DEL $(cat /tmp/"$tag")"
                 done

@@ -1,5 +1,7 @@
 # Uniblocks: Universal updatable status bar modules generator
 
+![](preview.gif)
+
 ![Uniblocks](https://cloud.disroot.org/s/fjQCarxJZNJj5Wz/preview)
 
 ## Features
@@ -9,10 +11,6 @@
 -  Extensible & Customizable
 -  Runs as fast as it gets! (hint: POSIX compliant shellscript)
 
-## Description
-
-Modules produced by this script can be used with any status bar application out there as this script maintains a client server paradigm, where the server updates the modules and the client displays them.
-
 ## Installation
 
 ```sh
@@ -21,7 +19,16 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 
 ## Usage
 
-Coming soon. lol.
+-  Create a **~/.config/uniblocksrc** file for configuring the modules.
+   Here is an [examples](https://github.com/salman-abedin/bolt/tree/master/example_config)
+
+-  run `uniblocks --server` to launch the server
+
+-  run `uniblocks --client` to generate the status string according to the order of the config
+
+-  run `uniblocks --client <TAG>` to generate individual modules
+
+-  run `uniblocks --update <TAG>` to update individual modules
 
 ## Uninstallation
 

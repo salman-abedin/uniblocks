@@ -2,7 +2,7 @@
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
-DEL="|"
+DEL=" | "
 
 parse() {
     while read -r line; do
@@ -25,6 +25,7 @@ parse() {
 
 case $1 in
     --server | -s)
+        echo "Uniblocks listening for client requests"
         DUMMYFIFO=/tmp/dff
         pgrep -f "$0 --server" | grep -v $$ | xargs kill -9 2> /dev/null
         [ -e "$PANELFIFO" ] && rm "$PANELFIFO"

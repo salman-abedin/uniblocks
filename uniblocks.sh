@@ -10,7 +10,8 @@ parse() {
         key=${line%%,*}
         interval=${line##*,}
         if [ "$key" = W ]; then
-            bspc subscribe report > "$PANELFIFO" &
+            $script > "$PANELFIFO" &
+            # bspc subscribe report > "$PANELFIFO" &
         elif [ "$interval" = 0 ]; then
             echo "$key$($script)" > "$PANELFIFO" &
         else
@@ -55,39 +56,38 @@ case $1 in
             keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
             for key in $keys; do
                 case $line in
-                    W*)
-                        line=${line#*:}
-                        line=${line%:L*}
-                        IFS=:
-                        set $line
-                        wm=
-                        while :; do
-                            case $1 in
-                                [FOU]*) name=🏚 ;;
-                                f*) name=🕳 ;;
-                                o*) name=🌴 ;;
-                                *) break ;;
-                            esac
-                            wm="$wm $name"
-                            shift
-                        done
-                        echo "$wm" > ~/W
-                        ;;
+                    # W*)
+                    #     line=${line#*:}
+                    #     line=${line%:L*}
+                    #     IFS=:
+                    #     set $line
+                    #     wm=
+                    #     while :; do
+                    #         case $1 in
+                    #             [FOU]*) name=🏚 ;;
+                    #             f*) name=🕳 ;;
+                    #             o*) name=🌴 ;;
+                    #             *) break ;;
+                    #         esac
+                    #         wm="$wm $name"
+                    #         shift
+                    #     done
+                    #     echo "$wm" > ~/W
+                    #     ;;
                     $key*) echo "${line#?}" > ~/"$key" ;;
-
                 esac
             done
 
-            # Print the status
-            status=
-            for key in $keys; do
-                if ! [ "$status" ]; then
-                    status="$(cat ~/"$key")"
-                    continue
-                fi
-                status="$status $del $(cat ~/"$key")"
-            done
-            printf "%s\r" "$status"
+            if [ "$2" ]; then
+                printf "%s\r" "$(cat ~/"$2")"
+            else
+                status=
+                for key in $keys; do
+                    ! [ "$status" ] && status="$(cat ~/"$key")" && continue
+                    status="$status $del $(cat ~/"$key")"
+                done
+                printf "%s\r" "$status"
+            fi
 
         done < "$PANELFIFO"
         ;;

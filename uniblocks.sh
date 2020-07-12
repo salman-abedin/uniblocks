@@ -1,22 +1,22 @@
 #!/usr/bin/env sh
 
 PANELFIFO=/tmp/panel_fifo
-UBPID=/tmp/ub_pid
+CONFIG=~/.config/uniblocksrc
+DEL=" | "
 
 parse() {
     while read -r line; do
         sstring=${line#*,}
         script=${sstring%,*}
-        key=${line%%,*}
+        tag=${line%%,*}
         interval=${line##*,}
-        if [ "$key" = W ]; then
+        if [ "$tag" = W ]; then
             $script > "$PANELFIFO" &
         elif [ "$interval" = 0 ]; then
-            $script | sed "s/^/$key/" > "$PANELFIFO" &
+            $script | sed "s/^/$tag/" > "$PANELFIFO" &
         else
             while :; do
-                $script | sed "s/^/$key/"
-                # echo "$key$($script)"
+                $script | sed "s/^/$tag/"
                 sleep "$interval"
             done > "$PANELFIFO" &
         fi
@@ -26,14 +26,11 @@ parse() {
 case $1 in
     --server | -s)
         DUMMYFIFO=/tmp/dff
-        generateblocks() {
-            [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
-            mkfifo "$PANELFIFO"
-            grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
-        }
-        trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
-        echo $$ > "$UBPID"
+        [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
+        mkfifo "$PANELFIFO"
+        grep -Ev "^#|^$" $CONFIG | parse
+
         [ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"
         mkfifo "$DUMMYFIFO"
         while :; do
@@ -42,28 +39,25 @@ case $1 in
         done
         ;;
     --client | -c)
-        del="|"
-        kill -35 "$(cat "$UBPID")" # Send signal to start piping into the fifo
-        sleep 1
         while read -r line; do
-            keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
-            for key in $keys; do
+            tags=$(grep -Ev "^#|^$" $CONFIG | cut -d, -f1)
+            for tag in $tags; do
                 case $line in
-                    $key*) echo "${line#?}" > ~/"$key" ;;
+                    $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
             done
             if [ "$2" ]; then
-                printf "%s\r" "$(cat ~/"$2")"
+                printf "%s\r" "$(cat /tmp/"$2")"
             else
                 status=
-                for key in $keys; do
-                    ! [ "$status" ] && status="$(cat ~/"$key")" && continue
-                    status="$status $del $(cat ~/"$key")"
+                for tag in $tags; do
+                    ! [ "$status" ] && status="$(cat /tmp/"$tag")" && continue
+                    status="$status $DEL $(cat /tmp/"$tag")"
                 done
                 printf "%s\r" "$status"
             fi
         done < "$PANELFIFO"
         ;;
-    refresh | -r) grep "^$2" ~/.config/uniblocksrc | parse ;;
+    --update | -u) grep "^$2" $CONFIG | parse ;;
     *) exit 1 ;;
 esac

@@ -6,8 +6,8 @@
 
 ## Features
 
--  Can be used with any status bar application
--  Periodic & event based update
+-  The modules can be used with any status bar application
+-  They can be updated both automatically and manually
 -  Runs as fast as it gets! (hint: POSIX compliant shellscript)
 
 ## Dependencies
@@ -25,17 +25,11 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
    Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
--  run `uniblocks --server,-s` to launch the server (preferably on startup)
+-  run `uniblocks --gen,-g` to generate the status string
 
--  run `uniblocks --client,-c` to generate the status string
+   -  Modules are printed according to the order in the **config**
 
-   -  Modules are ordered according to the order in the **config**
-
--  run `uniblocks --client,-c <TAG>` to generate individual modules
-
-   -  This will be useful in order to integrate your updatable modules with a status bar applications
-
--  run `uniblocks --update,-u <TAG>` to update individual modules
+-  run `uniblocks --update,-u <TAG>` to manually update individual modules
 
 ## Uninstallation
 

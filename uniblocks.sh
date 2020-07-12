@@ -5,7 +5,7 @@ CONFIG=~/.config/uniblocksrc
 DEL=" | "
 
 #---------------------------------------
-# Used for parsing in modules into the fifo
+# Used for parsing modules into the fifo
 #---------------------------------------
 parse() {
     while read -r line; do
@@ -28,11 +28,14 @@ parse() {
 
 case $1 in
     --server | -s)
-        echo "Uniblocks listening for client requests"
         DUMMYFIFO=/tmp/dff
+        echo "Uniblocks listening for client requests"
         pgrep -f "$0 --server" | grep -v $$ | xargs kill -9 2> /dev/null
         [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
         mkfifo "$PANELFIFO"
+        #---------------------------------------
+        # Parse the modules into the fifo
+        #---------------------------------------
         grep -Ev "^#|^$" $CONFIG | parse
         [ -e "$DUMMYFIFO" ] && rm -f "$DUMMYFIFO"
         mkfifo "$DUMMYFIFO"
@@ -45,7 +48,7 @@ case $1 in
         while read -r line; do
             TAGS=$(grep -Ev "^#|^$" $CONFIG | cut -d, -f1)
             #---------------------------------------
-            # Parse out the moudles from the fifo
+            # Parse moudles out from the fifo
             #---------------------------------------
             for tag in $TAGS; do
                 case $line in
@@ -53,7 +56,7 @@ case $1 in
                 esac
             done
             #---------------------------------------
-            # Print the modules
+            # Print the result
             #---------------------------------------
             if [ "$2" ]; then
                 printf "%s\r" "$(cat /tmp/"$2")"

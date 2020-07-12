@@ -2,6 +2,8 @@
 
 ![](preview.gif)
 
+![](screenshot.png)
+
 ## Features
 
 -  The modules can be used with any status bar application

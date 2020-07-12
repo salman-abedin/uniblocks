@@ -11,12 +11,12 @@ parse() {
         interval=${line##*,}
         if [ "$key" = W ]; then
             $script > "$PANELFIFO" &
-            # bspc subscribe report > "$PANELFIFO" &
         elif [ "$interval" = 0 ]; then
-            echo "$key$($script)" > "$PANELFIFO" &
+            $script | sed "s/^/$key/" > "$PANELFIFO" &
         else
             while :; do
-                echo "$key$($script)"
+                $script | sed "s/^/$key/"
+                # echo "$key$($script)"
                 sleep "$interval"
             done > "$PANELFIFO" &
         fi
@@ -29,11 +29,7 @@ case $1 in
         generateblocks() {
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
-
-            # Perse in modules into the fifo
             grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
-            # bspc subscribe report > "$PANELFIFO"
-            # bspc subscribe report > "$PANELFIFO" &
         }
         trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
@@ -46,38 +42,16 @@ case $1 in
         done
         ;;
     --client | -c)
-
         del="|"
         kill -35 "$(cat "$UBPID")" # Send signal to start piping into the fifo
         sleep 1
-
-        # Perse out modules from the fifo
         while read -r line; do
             keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
             for key in $keys; do
                 case $line in
-                    # W*)
-                    #     line=${line#*:}
-                    #     line=${line%:L*}
-                    #     IFS=:
-                    #     set $line
-                    #     wm=
-                    #     while :; do
-                    #         case $1 in
-                    #             [FOU]*) name=🏚 ;;
-                    #             f*) name=🕳 ;;
-                    #             o*) name=🌴 ;;
-                    #             *) break ;;
-                    #         esac
-                    #         wm="$wm $name"
-                    #         shift
-                    #     done
-                    #     echo "$wm" > ~/W
-                    #     ;;
                     $key*) echo "${line#?}" > ~/"$key" ;;
                 esac
             done
-
             if [ "$2" ]; then
                 printf "%s\r" "$(cat ~/"$2")"
             else
@@ -88,7 +62,6 @@ case $1 in
                 done
                 printf "%s\r" "$status"
             fi
-
         done < "$PANELFIFO"
         ;;
     refresh | -r) grep "^$2" ~/.config/uniblocksrc | parse ;;

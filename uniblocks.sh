@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-[ "$PANELFIFO" ] || export PANELFIFO=/tmp/panel_fifo
-[ "$UBPID" ] || export UBPID=/tmp/ub_pid
+PANELFIFO=/tmp/panel_fifo
+UBPID=/tmp/ub_pid
 
 parse() {
     while read -r line; do
@@ -23,13 +23,16 @@ parse() {
 }
 
 case $1 in
-    --server)
+    --server | -s)
         DUMMYFIFO=/tmp/dff
         generateblocks() {
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
+
+            # Perse in modules into the fifo
             grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
-            bspc subscribe report > "$PANELFIFO" &
+            # bspc subscribe report > "$PANELFIFO"
+            # bspc subscribe report > "$PANELFIFO" &
         }
         trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
@@ -41,42 +44,51 @@ case $1 in
             wait
         done
         ;;
-    --client)
-        del="  |  "
-        kill -35 "$(cat "$UBPID")"
+    --client | -c)
+
+        del="|"
+        kill -35 "$(cat "$UBPID")" # Send signal to start piping into the fifo
         sleep 1
+
+        # Perse out modules from the fifo
         while read -r line; do
-            case $line in
-                d*) dt="${line#?}" ;;
-                n*) not="${line#?}" ;;
-                s*) sys="${line#?}" ;;
-                v*) vol="${line#?}" ;;
-                w*) wif="${line#?}" ;;
-                W*)
-                    wm=
-                    IFS=':'
-                    set -- ${line#?}
-                    while [ "$#" -gt 0 ]; do
-                        item="$1"
-                        name="${item#?}"
-                        case "$item" in
-                            [mMfFoOuULG]*)
-                                case "$item" in
-                                    [FOU]*) name=" 🏚  " ;;
-                                    f*) name=" 🕳  " ;;
-                                    o*) name=" 🌴 " ;;
-                                    LM | G*?) name="" ;;
-                                    *) name="" ;;
-                                esac
-                                wm="${wm} ${name}"
-                                ;;
-                        esac
-                        shift
-                    done
-                    ;;
-            esac
-            printf "%s\r" \
-                "$wif $del $not $del $vol $del $wm $del $sys $del $dt"
+            keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
+            for key in $keys; do
+                case $line in
+                    W*)
+                        line=${line#*:}
+                        line=${line%:L*}
+                        IFS=:
+                        set $line
+                        wm=
+                        while :; do
+                            case $1 in
+                                [FOU]*) name=🏚 ;;
+                                f*) name=🕳 ;;
+                                o*) name=🌴 ;;
+                                *) break ;;
+                            esac
+                            wm="$wm $name"
+                            shift
+                        done
+                        echo "$wm" > ~/W
+                        ;;
+                    $key*) echo "${line#?}" > ~/"$key" ;;
+
+                esac
+            done
+
+            # Print the status
+            status=
+            for key in $keys; do
+                if ! [ "$status" ]; then
+                    status="$(cat ~/"$key")"
+                    continue
+                fi
+                status="$status $del $(cat ~/"$key")"
+            done
+            printf "%s\r" "$status"
+
         done < "$PANELFIFO"
         ;;
     refresh | -r) grep "^$2" ~/.config/uniblocksrc | parse ;;

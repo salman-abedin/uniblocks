@@ -4,7 +4,6 @@
 
 W,bspc subscribe report,0
 v,volume,0
-# m,mailbox,0,2
 n,noti-stat,0
 
 d,date-time,1m

@@ -6,16 +6,16 @@
 parse() {
     while read -r line; do
         sstring=${line#*,}
-        key=${line%%,*}
         script=${sstring%,*}
+        key=${line%%,*}
         interval=${line##*,}
         if [ "$key" = W ]; then
             bspc subscribe report > "$PANELFIFO" &
         elif [ "$interval" = 0 ]; then
-            echo "$key""$("$script")" > "$PANELFIFO" &
+            echo "$key$($script)" > "$PANELFIFO" &
         else
             while :; do
-                echo "$key""$($script)"
+                echo "$key$($script)"
                 sleep "$interval"
             done > "$PANELFIFO" &
         fi
@@ -29,7 +29,7 @@ case $1 in
             [ -e "$PANELFIFO" ] && rm "$PANELFIFO"
             mkfifo "$PANELFIFO"
             grep -Ev "^#|^$" ~/.config/uniblocksrc | parse
-            # bspc subscribe report > "$PANELFIFO" &
+            bspc subscribe report > "$PANELFIFO" &
         }
         trap 'pgrep -P $$ | grep -v $$ | xargs kill -9; generateblocks' RTMIN+1
 
@@ -42,81 +42,41 @@ case $1 in
         done
         ;;
     --client)
-
         del="  |  "
         kill -35 "$(cat "$UBPID")"
         sleep 1
         while read -r line; do
-
-            keys=$(grep -Ev "^#|^$" ~/.config/uniblocksrc | cut -d, -f1)
-            for key in $keys; do
-                case $line in
-                    W*)
-                        wm=
-                        IFS=':'
-                        set -- ${line#?}
-                        while [ "$#" -gt 0 ]; do
-                            item="$1"
-                            name="${item#?}"
-                            case "$item" in
-                                [mMfFoOuULG]*)
-                                    case "$item" in
-                                        [FOU]*) name=" 🏚  " ;;
-                                        f*) name=" 🕳  " ;;
-                                        o*) name=" 🌴 " ;;
-                                        LM | G*?) name="" ;;
-                                        *) name="" ;;
-                                    esac
-                                    wm="${wm} ${name}"
-                                    ;;
-                            esac
-                            shift
-                        done
-                        export "W=$wm"
-                        ;;
-                    $key*) export "$key=${line#?}" ;;
-                esac
-            done
-
-            for k in $keys; do
-                status="$status $del $stat_$key"
-                :
-            done
-
-            printf '%s\n' "$status"
-
-            # case $line in
-            #     d*) dt="${line#?}" ;;
-            #     n*) not="${line#?}" ;;
-            #     s*) sys="${line#?}" ;;
-            #     v*) vol="${line#?}" ;;
-            #     w*) wif="${line#?}" ;;
-            #     W*)
-            #         wm=
-            #         IFS=':'
-            #         set -- ${line#?}
-            #         while [ "$#" -gt 0 ]; do
-            #             item="$1"
-            #             name="${item#?}"
-            #             case "$item" in
-            #                 [mMfFoOuULG]*)
-            #                     case "$item" in
-            #                         [FOU]*) name=" 🏚  " ;;
-            #                         f*) name=" 🕳  " ;;
-            #                         o*) name=" 🌴 " ;;
-            #                         LM | G*?) name="" ;;
-            #                         *) name="" ;;
-            #                     esac
-            #                     wm="${wm} ${name}"
-            #                     ;;
-            #             esac
-            #             shift
-            #         done
-            #         ;;
-            # esac
-            # printf "%s\r" \
-            #     "$wif $del $not $del $vol $del $wm $del $sys $del $dt"
-
+            case $line in
+                d*) dt="${line#?}" ;;
+                n*) not="${line#?}" ;;
+                s*) sys="${line#?}" ;;
+                v*) vol="${line#?}" ;;
+                w*) wif="${line#?}" ;;
+                W*)
+                    wm=
+                    IFS=':'
+                    set -- ${line#?}
+                    while [ "$#" -gt 0 ]; do
+                        item="$1"
+                        name="${item#?}"
+                        case "$item" in
+                            [mMfFoOuULG]*)
+                                case "$item" in
+                                    [FOU]*) name=" 🏚  " ;;
+                                    f*) name=" 🕳  " ;;
+                                    o*) name=" 🌴 " ;;
+                                    LM | G*?) name="" ;;
+                                    *) name="" ;;
+                                esac
+                                wm="${wm} ${name}"
+                                ;;
+                        esac
+                        shift
+                    done
+                    ;;
+            esac
+            printf "%s\r" \
+                "$wif $del $not $del $vol $del $wm $del $sys $del $dt"
         done < "$PANELFIFO"
         ;;
     refresh | -r) grep "^$2" ~/.config/uniblocksrc | parse ;;

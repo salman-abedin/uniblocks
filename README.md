@@ -7,7 +7,7 @@
 ## Features
 
 -  The modules can be used with any status bar application
--  They can be updated both automatically and manually
+-  Updating is possible both periodically and manually
 -  Runs as fast as it gets (hint: POSIX compliant shellscript)
 
 ## Dependencies

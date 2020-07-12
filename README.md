@@ -25,9 +25,7 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
    Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
--  run `uniblocks --gen,-g` to generate the status string
-
-   -  Modules are printed according to the order in the **config**
+-  run `uniblocks --gen,-g` to generate the status string(Modules are printed according to the order in the **config**)
 
 -  run `uniblocks --update,-u <TAG>` to manually update individual modules
 

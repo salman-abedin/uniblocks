@@ -1,8 +1,10 @@
+.POSIX:
 PREFIX = /usr/local
+
 install:
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@for e in *.sh; do \
-		cp $$e $${e%.*}; \
+		cp -f $$e $${e%.*}; \
 		chmod 755 $${e%.*}; \
 		mv $${e%.*} ${DESTDIR}${PREFIX}/bin; \
 		done

@@ -31,6 +31,8 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 
 -  run `uniblocks --update,-u <TAG>` to manually update individual modules
 
+-  run `uniblocks --kill,-k` to kill all running instances
+
 ## Uninstallation
 
 ```sh

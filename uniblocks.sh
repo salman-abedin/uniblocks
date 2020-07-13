@@ -23,7 +23,7 @@ parse() {
                 sleep "$interval"
             done > "$PANELFIFO" &
         fi
-    done < /dev/stdin
+    done
 }
 
 case $1 in

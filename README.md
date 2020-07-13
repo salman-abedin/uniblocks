@@ -28,8 +28,8 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 | Command                       | Effect                                                                   |
 | ----------------------------- | ------------------------------------------------------------------------ |
 | `uniblocks --gen,-g`          | Prints the status string to standard out (The config dictates the order) |
-| `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. the volume module)              |
-| `uniblocks --kill,-k`         | Kills all running instances (Convenient for testing purpose)             |
+| `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. The volume module)              |
+| `uniblocks --kill,-k`         | Kills all running instances                                              |
 
 ## Uninstallation
 

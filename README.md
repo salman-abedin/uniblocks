@@ -1,4 +1,4 @@
-# Uniblocks: Universal updatable status bar modules generator
+# Uniblocks: Universal updatable status bar module generator
 
 ![](preview.gif)
 

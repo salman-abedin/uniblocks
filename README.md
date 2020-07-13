@@ -1,12 +1,14 @@
 # Uniblocks: Universal updatable status bar module generator
 
+Uniblocks combines all of your status bar modules into a single updatable string that can be used with any application.
+
 ![](preview.gif)
 
 ![](screenshot.png)
 
 ## Features
 
--  The modules can be used with any status bar application
+-  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
 -  Runs as fast as it gets. (hint: POSIX compliant shellscript)
 

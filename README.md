@@ -25,13 +25,11 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
    Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
--  run `uniblocks --gen,-g` to generate the status string
-
-   -  Modules are printed according to the order in the **config**
-
--  run `uniblocks --update,-u <TAG>` to manually update individual modules
-
--  run `uniblocks --kill,-k` to kill all running instances
+| Command                       | Effect                             |
+| ----------------------------- | ---------------------------------- |
+| `uniblocks --gen,-g`          | Generates the status string        |
+| `uniblocks --update,-u <TAG>` | Manually updates individual module |
+| `uniblocks --kill,-k`         | Kills all running instances        |
 
 ## Uninstallation
 

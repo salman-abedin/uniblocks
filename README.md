@@ -4,7 +4,7 @@
 
 # Uniblocks: Universal updatable status bar module generator
 
-Uniblocks combines all of your status bar modules into a single updatable string that can be used with any application.
+Uniblocks combines all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself is handling all the updating.
 
 ## Features
 

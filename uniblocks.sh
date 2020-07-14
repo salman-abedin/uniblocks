@@ -5,7 +5,7 @@ CONFIG=~/.config/uniblocksrc
 DEL="  |  "
 
 #---------------------------------------
-# minimized cat
+# Minimized "cat"
 #---------------------------------------
 cat() {
     for file in "$@"; do

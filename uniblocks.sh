@@ -38,7 +38,7 @@ parse() {
 case $1 in
     --gen | -g)
         [ -e "$PANELFIFO" ] && rm "$PANELFIFO" &&
-            pgrep -f "$0" | grep -v $$ | xargs kill -9 2> /dev/null
+            kill -9 $(pgrep -f "$0" | grep -v $$) 2> /dev/null
         mkfifo "$PANELFIFO"
         # ---------------------------------------
         # Parse the modules into the fifo
@@ -46,7 +46,7 @@ case $1 in
         grep -Ev "^#|^$" $CONFIG | parse
 
         while read -r line; do
-            TAGS=$(grep -Ev "^#|^$" $CONFIG | cut -d, -f1)
+            TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
             #---------------------------------------
             # Parse moudles out from the fifo
             #---------------------------------------
@@ -55,22 +55,19 @@ case $1 in
                     $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
             done
+
             #---------------------------------------
             # Print the result
             #---------------------------------------
-            if [ "$2" ]; then
-                printf "%s\r" "$(cat /tmp/"$2")"
-            else
-                status=
-                for tag in $TAGS; do
-                    ! [ "$status" ] && status="$(cat /tmp/"$tag")" && continue
-                    status="$status $DEL $(cat /tmp/"$tag")"
-                done
-                printf "%s\r" "$status"
-            fi
+            status=
+            for tag in $TAGS; do
+                ! [ "$status" ] && status="$(cat /tmp/"$tag")" && continue
+                status="$status $DEL $(cat /tmp/"$tag")"
+            done
+            printf "%s\r" "$status"
         done < "$PANELFIFO"
         ;;
     --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
-    --kill | -k) pgrep -f "$0" | xargs kill -9 2> /dev/null ;;
+    --kill | -k) kill -9 $(pgrep -f "$0") 2> /dev/null ;;
     *) exit 1 ;;
 esac

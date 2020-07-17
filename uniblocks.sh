@@ -37,8 +37,8 @@ case $1 in
         # ---------------------------------------
         # Parse the modules into the fifo
         # ---------------------------------------
-        sed "/^[#$]/d" $CONFIG | parse
-        # grep -Ev "^#|^$" $CONFIG | parse
+        grep -Ev "^#|^$" $CONFIG | parse
+        sleep 1
 
         while read -r line; do
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)

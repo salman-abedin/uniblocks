@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
+# Dependencies: sed, grep, pgrep, mkfifo
+# Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
@@ -11,23 +13,25 @@ DEL="  |  "
 #---------------------------------------
 parse() {
     while read -r line; do
-        sstring=${line#*,}
-        script=${sstring%,*}
-        tag=${line%%,*}
-        interval=${line##*,}
+        TEMP=${line#*,}
+        SCRIPT=${TEMP%,*}
+        TAG=${line%%,*}
+        INTERVAL=${line##*,}
 
-        if [ "$tag" = W ]; then
-            $script > "$PANELFIFO" &
-        elif [ "$interval" = 0 ]; then
-            $script | sed "s/^/$tag/" > "$PANELFIFO" &
+        if [ "$TAG" = W ]; then
+            $SCRIPT > "$PANELFIFO" &
+        elif [ "$INTERVAL" = 0 ]; then
+            $SCRIPT | sed "s/^/$TAG/" > "$PANELFIFO" &
         else
             while :; do
-                $script | sed "s/^/$tag/"
-                sleep "$interval"
+                $SCRIPT | sed "s/^/$TAG/"
+                sleep "$INTERVAL"
             done > "$PANELFIFO" &
         fi
     done
 }
+
+trap 'kill -- -$$' INT EXIT
 
 case $1 in
     --gen | -g)
@@ -40,32 +44,25 @@ case $1 in
         grep -Ev "^#|^$" $CONFIG | parse
         sleep 1
 
+        #---------------------------------------
+        # Parse moudles out from the fifo
+        #---------------------------------------
         while read -r line; do
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
-            #---------------------------------------
-            # Parse moudles out from the fifo
-            #---------------------------------------
+            status=
             for tag in $TAGS; do
                 case $line in
                     $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
-            done
-
-            #---------------------------------------
-            # Print the result
-            #---------------------------------------
-            status=
-            for tag in $TAGS; do
                 if [ -z "$status" ]; then
-                    status="$(cat /tmp/"$tag")"
+                    read -r status < /tmp/"$tag"
                 else
-                    status="$status $DEL $(cat /tmp/"$tag")"
+                    read -r newstatus < /tmp/"$tag"
+                    status="$status $DEL $newstatus"
                 fi
             done
-            printf "%s\r" "$status"
+            printf "%s\r" "$status" # Print the result
         done < "$PANELFIFO"
         ;;
     --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
-    --kill | -k) kill -9 $(pgrep -f "$0") 2> /dev/null ;;
-    *) exit 1 ;;
 esac

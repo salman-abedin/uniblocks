@@ -10,11 +10,11 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 
 -  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
--  Runs as fast as it gets. (hint: ~70 Lines of POSIX shellscript)
+-  Runs as fast as it gets. (hint: ~50 Lines of POSIX shellscript)
 
 ## Dependencies
 
--  cat, sed, grep, pgrep, mkfifo
+-  sed, grep, pgrep, mkfifo
 
 ## Installation
 
@@ -31,7 +31,6 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 | ----------------------------- | ------------------------------------------------------------------------ |
 | `uniblocks --gen,-g`          | Prints the status string to standard out (The config dictates the order) |
 | `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. The volume module)              |
-| `uniblocks --kill,-k`         | Kills all running instances                                              |
 
 ## Uninstallation
 

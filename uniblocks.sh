@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+#
+# Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
@@ -13,6 +15,7 @@ parse() {
         script=${sstring%,*}
         tag=${line%%,*}
         interval=${line##*,}
+
         if [ "$tag" = W ]; then
             $script > "$PANELFIFO" &
         elif [ "$interval" = 0 ]; then
@@ -34,7 +37,8 @@ case $1 in
         # ---------------------------------------
         # Parse the modules into the fifo
         # ---------------------------------------
-        grep -Ev "^#|^$" $CONFIG | parse
+        sed "/^[#$]/d" $CONFIG | parse
+        # grep -Ev "^#|^$" $CONFIG | parse
 
         while read -r line; do
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
@@ -52,8 +56,11 @@ case $1 in
             #---------------------------------------
             status=
             for tag in $TAGS; do
-                ! [ "$status" ] && status="$(cat /tmp/"$tag")" && continue
-                status="$status $DEL $(cat /tmp/"$tag")"
+                if [ -z "$status" ]; then
+                    status="$(cat /tmp/"$tag")"
+                else
+                    status="$status $DEL $(cat /tmp/"$tag")"
+                fi
             done
             printf "%s\r" "$status"
         done < "$PANELFIFO"

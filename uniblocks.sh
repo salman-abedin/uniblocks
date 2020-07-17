@@ -57,9 +57,11 @@ case $1 in
             status=
             for tag in $TAGS; do
                 if [ -z "$status" ]; then
-                    status="$(cat /tmp/"$tag")"
+                    read -r status < /tmp/"$tag"
                 else
-                    status="$status $DEL $(cat /tmp/"$tag")"
+                    read -r newstatus < /tmp/"$tag"
+                    status="$status $DEL $newstatus"
+                    # status="$status $DEL $(cat /tmp/"$tag")"
                 fi
             done
             printf "%s\r" "$status"

@@ -43,7 +43,7 @@ sudo make uninstall
 
 ## Repos you might be interested in
 
-[Alfred/panel.sh](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
+[Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
 : The status bar modules
 
 [Bolt](https://github.com/salman-abedin/bolt)

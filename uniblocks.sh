@@ -5,15 +5,6 @@ CONFIG=~/.config/uniblocksrc
 DEL="  |  "
 
 #---------------------------------------
-# Minimized "cat"
-#---------------------------------------
-cat() {
-    while IFS= read -r line; do
-        echo "$line"
-    done < "$1"
-}
-
-#---------------------------------------
 # Used for parsing modules into the fifo
 #---------------------------------------
 parse() {

@@ -29,6 +29,8 @@ parse() {
     done
 }
 
+trap 'kill -- -$$' INT
+
 case $1 in
     --gen | -g)
         [ -e "$PANELFIFO" ] && rm "$PANELFIFO" &&

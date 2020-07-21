@@ -63,7 +63,6 @@ case $1 in
                 else
                     read -r newstatus < /tmp/"$tag"
                     status="$status $DEL $newstatus"
-                    # status="$status $DEL $(cat /tmp/"$tag")"
                 fi
             done
             printf "%s\r" "$status"

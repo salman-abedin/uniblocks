@@ -70,6 +70,5 @@ case $1 in
         done < "$PANELFIFO"
         ;;
     --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
-    --kill | -k) kill -9 $(pgrep -f "$0") 2> /dev/null ;;
     *) exit 1 ;;
 esac

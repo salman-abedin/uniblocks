@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
+# Dependencies: read, sed, grep, pgrep, mkfifo
+# Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc

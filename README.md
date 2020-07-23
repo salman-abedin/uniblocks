@@ -14,7 +14,7 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 
 ## Dependencies
 
--  sed, grep, pgrep, mkfifo
+-  awk, grep, pgrep, mkfifo
 
 ## Installation
 

@@ -17,7 +17,6 @@ parse() {
         SCRIPT=${TEMP%,*}
         TAG=${line%%,*}
         INTERVAL=${line##*,}
-
         if [ "$TAG" = W ]; then
             $SCRIPT > "$PANELFIFO" &
         elif [ "$INTERVAL" = 0 ]; then
@@ -31,7 +30,7 @@ parse() {
     done
 }
 
-trap 'rm -f $PANELFIFO; notify-send caught; exit' INT
+trap 'rm -f $PANELFIFO; exit' INT
 
 case $1 in
     --gen | -g)
@@ -41,7 +40,7 @@ case $1 in
         # Parse the modules into the fifo
         # ---------------------------------------
         grep -Ev "^#|^$" $CONFIG | parse
-        sleep 1
+        sleep 1 # Give the fifo a little time to process all the module
         #---------------------------------------
         # Parse moudles out from the fifo
         #---------------------------------------

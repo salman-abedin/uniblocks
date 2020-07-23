@@ -13,19 +13,19 @@ DEL="  |  "
 #---------------------------------------
 parse() {
     while read -r line; do
-        sstring=${line#*,}
-        script=${sstring%,*}
-        tag=${line%%,*}
-        interval=${line##*,}
+        TEMP=${line#*,}
+        SCRIPT=${TEMP%,*}
+        TAG=${line%%,*}
+        INTERVAL=${line##*,}
 
-        if [ "$tag" = W ]; then
-            $script > "$PANELFIFO" &
-        elif [ "$interval" = 0 ]; then
-            $script | sed "s/^/$tag/" > "$PANELFIFO" &
+        if [ "$TAG" = W ]; then
+            $SCRIPT > "$PANELFIFO" &
+        elif [ "$INTERVAL" = 0 ]; then
+            $SCRIPT | sed "s/^/$TAG/" > "$PANELFIFO" &
         else
             while :; do
-                $script | sed "s/^/$tag/"
-                sleep "$interval"
+                $SCRIPT | sed "s/^/$TAG/"
+                sleep "$INTERVAL"
             done > "$PANELFIFO" &
         fi
     done

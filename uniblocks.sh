@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
-# Dependencies: sed, grep, pgrep, mkfifo
+# Dependencies: awk, grep, pgrep, mkfifo
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -21,18 +21,17 @@ parse() {
         if [ "$TAG" = W ]; then
             $SCRIPT > "$PANELFIFO" &
         elif [ "$INTERVAL" = 0 ]; then
-            $SCRIPT | sed "s/^/$TAG/" > "$PANELFIFO" &
+            echo "$TAG$($SCRIPT)" > "$PANELFIFO" &
         else
             while :; do
-                $SCRIPT | sed "s/^/$TAG/"
+                echo "$TAG$($SCRIPT)"
                 sleep "$INTERVAL"
             done > "$PANELFIFO" &
         fi
     done
 }
 
-trap 'kill -- -$$' INT EXIT
-# trap 'kill -- $(pgrep -f "$0")' INT EXIT
+trap 'rm -f $PANELFIFO; notify-send caught; exit' INT
 
 case $1 in
     --gen | -g)
@@ -63,5 +62,5 @@ case $1 in
             printf "%s\r" "$status" # Print the result
         done < "$PANELFIFO"
         ;;
-    --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
+    --update | -u) [ -p "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
 esac

@@ -35,9 +35,8 @@ trap 'kill -- -$$' INT EXIT
 
 case $1 in
     --gen | -g)
-        [ -e "$PANELFIFO" ] && rm "$PANELFIFO" &&
-            kill -9 $(pgrep -f "$0" | grep -v $$) 2> /dev/null
-        mkfifo "$PANELFIFO"
+        kill -9 $(pgrep -f "$0" | grep -v $$) 2> /dev/null
+        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
         # ---------------------------------------
         # Parse the modules into the fifo
         # ---------------------------------------

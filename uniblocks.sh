@@ -31,7 +31,7 @@ parse() {
     done
 }
 
-trap 'kill -- -$$' INT
+trap 'kill -- -$$' INT EXIT
 
 case $1 in
     --gen | -g)
@@ -44,11 +44,11 @@ case $1 in
         grep -Ev "^#|^$" $CONFIG | parse
         sleep 1
 
+        #---------------------------------------
+        # Parse moudles out from the fifo
+        #---------------------------------------
         while read -r line; do
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
-            #---------------------------------------
-            # Parse moudles out from the fifo
-            #---------------------------------------
             status=
             for tag in $TAGS; do
                 case $line in
@@ -61,12 +61,8 @@ case $1 in
                     status="$status $DEL $newstatus"
                 fi
             done
-            #---------------------------------------
-            # Print the result
-            #---------------------------------------
-            printf "%s\r" "$status"
+            printf "%s\r" "$status" # Print the result
         done < "$PANELFIFO"
         ;;
     --update | -u) [ -e "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
-    *) exit 1 ;;
 esac

@@ -49,17 +49,11 @@ case $1 in
             #---------------------------------------
             # Parse moudles out from the fifo
             #---------------------------------------
+            status=
             for tag in $TAGS; do
                 case $line in
                     $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
-            done
-
-            #---------------------------------------
-            # Print the result
-            #---------------------------------------
-            status=
-            for tag in $TAGS; do
                 if [ -z "$status" ]; then
                     read -r status < /tmp/"$tag"
                 else
@@ -67,6 +61,9 @@ case $1 in
                     status="$status $DEL $newstatus"
                 fi
             done
+            #---------------------------------------
+            # Print the result
+            #---------------------------------------
             printf "%s\r" "$status"
         done < "$PANELFIFO"
         ;;

@@ -32,17 +32,17 @@ parse() {
 }
 
 trap 'kill -- -$$' INT EXIT
+# trap 'kill -- $(pgrep -f "$0")' INT EXIT
 
 case $1 in
     --gen | -g)
-        kill -9 $(pgrep -f "$0" | grep -v $$) 2> /dev/null
+        kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null
         [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
         # ---------------------------------------
         # Parse the modules into the fifo
         # ---------------------------------------
         grep -Ev "^#|^$" $CONFIG | parse
         sleep 1
-
         #---------------------------------------
         # Parse moudles out from the fifo
         #---------------------------------------

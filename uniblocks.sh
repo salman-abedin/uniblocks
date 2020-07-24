@@ -29,6 +29,14 @@ parse() {               # Used for parsing modules into the fifo
     exec 3<&- # Unset FD
 }
 
+scan() { # Used for getting config of the module(s)
+    while IFS= read -r line; do
+        case $line in
+            "$1"*) echo "$line" && break ;;
+        esac
+    done < $CONFIG
+}
+
 case $1 in
     --gen | -g)
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup
@@ -51,5 +59,5 @@ case $1 in
             printf "%s\r" "$status" # Print the result
         done < $PANELFIFO
         ;;
-    --update | -u) [ -p $PANELFIFO ] && grep "^$2" $CONFIG | parse ;;
+    --update | -u) [ -p $PANELFIFO ] && scan "$2" | parse ;;
 esac

@@ -11,16 +11,26 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 -  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
 -  Different modules can be updated at different intervals
--  Runs as fast as it gets. (hint: ~50 Lines of POSIX shell scripting with FIFO)
+-  Runs as fast as it gets. (hint: ~75 Lines of POSIX shell scripting with FIFO)
 
 ## Dependencies
 
--  grep, pgrep, mkfifo, xargs
+-  pgrep, xargs, mkfifo, sleep
 
 ## Installation
 
 ```sh
 git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo make install
+```
+
+## Patches
+
+-  **dwm status support**.
+
+```sh
+cd uniblocks
+patch < dwm.diff    # Add the feature
+patch -R < dwm.diff # Remove the feature
 ```
 
 ## Usage
@@ -36,6 +46,7 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 ## Uninstallation
 
 ```sh
+cd uniblocks
 sudo make uninstall
 ```
 

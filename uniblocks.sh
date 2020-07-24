@@ -12,41 +12,39 @@ DEL="  |  "
 # Used for parsing modules into the fifo
 #---------------------------------------
 parse() {
+    # exec 3> $PANELFIFO
     while read -r line; do
         TEMP=${line#*,}
         SCRIPT=${TEMP%,*}
         TAG=${line%%,*}
         INTERVAL=${line##*,}
         if [ "$TAG" = W ]; then
-            $SCRIPT >&3 &
+            $SCRIPT > $PANELFIFO &
+            # $SCRIPT >&3 &
         elif [ "$INTERVAL" = 0 ]; then
-            echo "$TAG$($SCRIPT)" >&3 &
+            echo "$TAG$($SCRIPT)" > $PANELFIFO &
+            # echo "$TAG$($SCRIPT)" >&3 &
         else
             while :; do
                 echo "$TAG$($SCRIPT)"
                 sleep "$INTERVAL"
-            done >&3 &
+            done > $PANELFIFO &
+            # done >&3 &
         fi
     done
+    # exec 3>&-
 }
 
-trap 'exec 3>&-; rm -f $PANELFIFO; exit' INT
+trap 'rm -f $PANELFIFO; exit' INT
 
-exec 3<> "$PANELFIFO"
 case $1 in
     --gen | -g)
         # Kill previously launched(if any) modules
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null
-        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
-        # ---------------------------------------
-        # Parse the modules into the fifo
-        # ---------------------------------------
-        grep -Ev "^#|^$" $CONFIG | parse
-        sleep 1 # Give the fifo a little time to process all the module
-        #---------------------------------------
-        # Parse moudles out from the fifo
-        #---------------------------------------
-        while read -r line; do
+        [ -e "$PANELFIFO" ] || mkfifo "$PANELFIFO"
+        grep -Ev "^#|^$" $CONFIG | parse # Parse the modules into the fifo
+        sleep 1                          # Give the fifo a little time to process all the module
+        while read -r line; do           # Parse moudles out from the fifo
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
             status=
             for tag in $TAGS; do
@@ -61,7 +59,7 @@ case $1 in
                 fi
             done
             printf "%s\r" "$status" # Print the result
-        done <&3
+        done < $PANELFIFO
         ;;
-    --update | -u) [ -p "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
+    --update | -u) [ -e $PANELFIFO ] && grep "^$2" $CONFIG | parse ;;
 esac

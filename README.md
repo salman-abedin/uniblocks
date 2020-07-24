@@ -10,7 +10,8 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 
 -  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
--  Runs as fast as it gets. (hint: ~50 Lines of POSIX shellscript with FIFO)
+-  Different modules can be updated on different intervals
+-  Runs as fast as it gets. (hint: ~50 Lines of POSIX shell scripting with FIFO)
 
 ## Dependencies
 

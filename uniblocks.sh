@@ -18,22 +18,24 @@ parse() {
         TAG=${line%%,*}
         INTERVAL=${line##*,}
         if [ "$TAG" = W ]; then
-            $SCRIPT > "$PANELFIFO" &
+            $SCRIPT >&3 &
         elif [ "$INTERVAL" = 0 ]; then
-            echo "$TAG$($SCRIPT)" > "$PANELFIFO" &
+            echo "$TAG$($SCRIPT)" >&3 &
         else
             while :; do
                 echo "$TAG$($SCRIPT)"
                 sleep "$INTERVAL"
-            done > "$PANELFIFO" &
+            done >&3 &
         fi
     done
 }
 
-trap 'rm -f $PANELFIFO; exit' INT
+trap 'exec 3>&-; rm -f $PANELFIFO; exit' INT
 
+exec 3<> "$PANELFIFO"
 case $1 in
     --gen | -g)
+        # Kill previously launched(if any) modules
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null
         [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
         # ---------------------------------------
@@ -59,7 +61,7 @@ case $1 in
                 fi
             done
             printf "%s\r" "$status" # Print the result
-        done < "$PANELFIFO"
+        done <&3
         ;;
     --update | -u) [ -p "$PANELFIFO" ] && grep "^$2" $CONFIG | parse ;;
 esac

@@ -40,7 +40,7 @@ scan() { # Used for getting config of the module(s)
 case $1 in
     --gen | -g)
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup
-        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"         # Create fifo if it doesn't exist
+        [ -e "$PANELFIFO" ] || mkfifo "$PANELFIFO"         # Create fifo if it doesn't exist
         grep -Ev "^#|^$" $CONFIG | parse                   # Parse the modules into the fifo
         sleep 1                                            # Give the fifo a little time to process all the module
         trap 'rm -f $PANELFIFO; exit' INT TERM QUIT EXIT   # Setup up trap for cleanup
@@ -59,5 +59,5 @@ case $1 in
             printf "%s\r" "$status" # Print the result
         done < $PANELFIFO
         ;;
-    --update | -u) [ -p $PANELFIFO ] && scan "$2" | parse ;;
+    --update | -u) [ -e $PANELFIFO ] && scan "$2" | parse ;;
 esac

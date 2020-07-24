@@ -10,11 +10,12 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 
 -  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
--  Runs as fast as it gets. (hint: ~50 Lines of POSIX shellscript)
+-  Different modules can be updated at different intervals
+-  Runs as fast as it gets. (hint: ~50 Lines of POSIX shell scripting with FIFO)
 
 ## Dependencies
 
--  awk, grep, pgrep, mkfifo
+-  awk, grep, pgrep, mkfifo, xargs
 
 ## Installation
 
@@ -42,23 +43,16 @@ sudo make uninstall
 
 ## Repos you might be interested in
 
-[Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
-: The status bar modules
-
-[Bolt](https://github.com/salman-abedin/bolt)
-: The lightning fast workflow creator
-
-[Crystal](https://github.com/salman-abedin/crystal)
-: The transparent setup
-
-[Magpie](https://github.com/salman-abedin/magpie)
-: The dotfiles
-
-[Alfred](https://github.com/salman-abedin/alfred)
-: The scripts
-
-[Devour](https://github.com/salman-abedin/devour)
-: Terminal swallowing
+| Name                                                                         | Description                     |
+| ---------------------------------------------------------------------------- | ------------------------------- |
+| [Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh) | The status bar modules          |
+| [bolt](https://github.com/salman-abedin/bolt)                                | The launcher wrapper            |
+| [tide](https://github.com/salman-abedin/puri)                                | Minimal Transmission CLI client |
+| [puri](https://github.com/salman-abedin/puri)                                | Minimal URL launcher            |
+| [devour](https://github.com/salman-abedin/devour)                            | Terminal swallowing             |
+| [crystal](https://github.com/salman-abedin/crystal)                          | The transparent setup           |
+| [Magpie](https://github.com/salman-abedin/magpie)                            | The dotfiles                    |
+| [Alfred](https://github.com/salman-abedin/alfred)                            | The scripts                     |
 
 ## Contact
 

@@ -8,43 +8,36 @@ PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
 DEL="  |  "
 
-#---------------------------------------
-# Used for parsing modules into the fifo
-#---------------------------------------
-parse() {
-    # exec 3> $PANELFIFO
+parse() {               # Used for parsing modules into the fifo
+    exec 3<> $PANELFIFO # File descriptor for addressing convenience
     while read -r line; do
         TEMP=${line#*,}
         SCRIPT=${TEMP%,*}
         TAG=${line%%,*}
         INTERVAL=${line##*,}
-        if [ "$TAG" = W ]; then
-            $SCRIPT > $PANELFIFO &
-            # $SCRIPT >&3 &
-        elif [ "$INTERVAL" = 0 ]; then
-            echo "$TAG$($SCRIPT)" > $PANELFIFO &
-            # echo "$TAG$($SCRIPT)" >&3 &
+        if [ "$TAG" = W ]; then # BSPWM specific
+            $SCRIPT >&3 &
+        elif [ "$INTERVAL" = 0 ]; then # Static modules
+            echo "$TAG$($SCRIPT)" >&3 &
         else
-            while :; do
+            while :; do # Dynamic modules
                 echo "$TAG$($SCRIPT)"
                 sleep "$INTERVAL"
-            done > $PANELFIFO &
-            # done >&3 &
+            done >&3 &
         fi
     done
-    # exec 3>&-
+    exec 3<&- # Unset FD
 }
-
-trap 'rm -f $PANELFIFO; exit' INT
 
 case $1 in
     --gen | -g)
         # Kill previously launched(if any) modules
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null
-        [ -e "$PANELFIFO" ] || mkfifo "$PANELFIFO"
-        grep -Ev "^#|^$" $CONFIG | parse # Parse the modules into the fifo
-        sleep 1                          # Give the fifo a little time to process all the module
-        while read -r line; do           # Parse moudles out from the fifo
+        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
+        grep -Ev "^#|^$" $CONFIG | parse  # Parse the modules into the fifo
+        sleep 1                           # Give the fifo a little time to process all the module
+        trap 'rm -f $PANELFIFO; exit' INT # Setup up trap for cleanup
+        while IFS= read -r line; do       # Parse moudles out from the fifo
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
             status=
             for tag in $TAGS; do
@@ -61,5 +54,5 @@ case $1 in
             printf "%s\r" "$status" # Print the result
         done < $PANELFIFO
         ;;
-    --update | -u) [ -e $PANELFIFO ] && grep "^$2" $CONFIG | parse ;;
+    --update | -u) [ -p $PANELFIFO ] && grep "^$2" $CONFIG | parse ;;
 esac

@@ -37,6 +37,14 @@ scan() { # Used for getting config of the module(s)
     done < $CONFIG
 }
 
+scan2() { # Used for getting config of the module(s)
+    while IFS= read -r line; do
+        case $line in
+            [[:alnum:]]*) echo "$line" && break ;;
+        esac
+    done < $CONFIG
+}
+
 case $1 in
     --gen | -g)
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup

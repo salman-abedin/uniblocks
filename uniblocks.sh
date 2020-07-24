@@ -31,8 +31,7 @@ parse() {               # Used for parsing modules into the fifo
 
 case $1 in
     --gen | -g)
-        # Kill previously launched(if any) modules
-        kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null
+        kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup
         [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
         grep -Ev "^#|^$" $CONFIG | parse  # Parse the modules into the fifo
         sleep 1                           # Give the fifo a little time to process all the module
@@ -44,12 +43,9 @@ case $1 in
                 case $line in
                     $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
                 esac
-                if [ -z "$status" ]; then
-                    read -r status < /tmp/"$tag"
-                else
-                    read -r newstatus < /tmp/"$tag"
-                    status="$status $DEL $newstatus"
-                fi
+                [ -z "$status" ] && read -r status < /tmp/"$tag" && continue
+                read -r newstatus < /tmp/"$tag"
+                status="$status $DEL $newstatus"
             done
             printf "%s\r" "$status" # Print the result
         done < $PANELFIFO

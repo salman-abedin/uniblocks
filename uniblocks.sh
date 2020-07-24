@@ -9,7 +9,7 @@ CONFIG=~/.config/uniblocksrc
 DELIMITER="  |  "
 
 parse() {               # Used for parsing modules into the fifo
-    exec 3<> $PANELFIFO # File descriptor for addressing convenience
+    exec 3<> $PANELFIFO # Set File Descriptor for addressing convenience
     while read -r line; do
         TEMP=${line#*,}
         SCRIPT=${TEMP%,*}

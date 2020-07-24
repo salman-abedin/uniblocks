@@ -43,29 +43,16 @@ sudo make uninstall
 
 ## Repos you might be interested in
 
-[Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
-: The status bar modules
-
-[bolt](https://github.com/salman-abedin/bolt)
-: The lightning fast file/folder launcher
-
-[tide](https://github.com/salman-abedin/puri)
-: Minimal Transmission CLI client
-
-[puri](https://github.com/salman-abedin/puri)
-: Minimal URL launcher
-
-[crystal](https://github.com/salman-abedin/crystal)
-: The transparent setup
-
-[devour](https://github.com/salman-abedin/devour)
-: Terminal swallowing
-
-[Alfred](https://github.com/salman-abedin/alfred)
-: The scripts
-
-[Magpie](https://github.com/salman-abedin/magpie)
-: The dotfiles
+| Name                                                                         | Description                     |
+| ---------------------------------------------------------------------------- | ------------------------------- |
+| [Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh) | The status bar modules          |
+| [bolt](https://github.com/salman-abedin/bolt)                                | The launcher wrapper            |
+| [tide](https://github.com/salman-abedin/puri)                                | Minimal Transmission CLI client |
+| [puri](https://github.com/salman-abedin/puri)                                | Minimal URL launcher            |
+| [devour](https://github.com/salman-abedin/devour)                            | Terminal swallowing             |
+| [crystal](https://github.com/salman-abedin/crystal)                          | The transparent setup           |
+| [Magpie](https://github.com/salman-abedin/magpie)                            | The dotfiles                    |
+| [Alfred](https://github.com/salman-abedin/alfred)                            | The scripts                     |
 
 ## Contact
 

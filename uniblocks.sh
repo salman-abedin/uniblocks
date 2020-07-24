@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
-# Dependencies: awk, grep, pgrep, mkfifo
+# Dependencies: awk, grep, pgrep, mkfifo, xargs
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -10,7 +10,7 @@ DELIMITER="  |  "
 
 cleanup() {
     rm -f $PANELFIFO
-    pgrep -f "$0" | xargs kill -9 -- $()
+    pgrep -f "$0" | xargs kill -9
 }
 
 parse() {               # Used for parsing modules into the fifo

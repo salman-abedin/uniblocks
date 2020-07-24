@@ -6,7 +6,7 @@
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
-DEL="  |  "
+DELIMITER="  |  "
 
 parse() {               # Used for parsing modules into the fifo
     exec 3<> $PANELFIFO # File descriptor for addressing convenience
@@ -45,7 +45,7 @@ case $1 in
                 esac
                 [ -z "$status" ] && read -r status < /tmp/"$tag" && continue
                 read -r newstatus < /tmp/"$tag"
-                status="$status $DEL $newstatus"
+                status="$status $DELIMITER $newstatus"
             done
             printf "%s\r" "$status" # Print the result
         done < $PANELFIFO

@@ -46,20 +46,26 @@ sudo make uninstall
 [Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh)
 : The status bar modules
 
-[Bolt](https://github.com/salman-abedin/bolt)
-: The lightning fast workflow creator
+[bolt](https://github.com/salman-abedin/bolt)
+: The lightning fast file/folder launcher
 
-[Crystal](https://github.com/salman-abedin/crystal)
+[tide](https://github.com/salman-abedin/puri)
+: Minimal Transmission CLI client
+
+[puri](https://github.com/salman-abedin/puri)
+: Minimal URL launcher
+
+[crystal](https://github.com/salman-abedin/crystal)
 : The transparent setup
 
-[Magpie](https://github.com/salman-abedin/magpie)
-: The dotfiles
+[devour](https://github.com/salman-abedin/devour)
+: Terminal swallowing
 
 [Alfred](https://github.com/salman-abedin/alfred)
 : The scripts
 
-[Devour](https://github.com/salman-abedin/devour)
-: Terminal swallowing
+[Magpie](https://github.com/salman-abedin/magpie)
+: The dotfiles
 
 ## Contact
 

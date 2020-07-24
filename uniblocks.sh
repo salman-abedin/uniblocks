@@ -32,17 +32,18 @@ parse() {               # Used for parsing modules into the fifo
 case $1 in
     --gen | -g)
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup
-        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"
-        grep -Ev "^#|^$" $CONFIG | parse  # Parse the modules into the fifo
-        sleep 1                           # Give the fifo a little time to process all the module
-        trap 'rm -f $PANELFIFO; exit' INT # Setup up trap for cleanup
-        while IFS= read -r line; do       # Parse moudles out from the fifo
-            TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)
+        [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"         # Create fifo if it doesn't exist
+        grep -Ev "^#|^$" $CONFIG | parse                   # Parse the modules into the fifo
+        sleep 1                                            # Give the fifo a little time to process all the module
+        trap 'rm -f $PANELFIFO; exit' INT                  # Setup up trap for cleanup
+        while IFS= read -r line; do                        # Parse moudles out from the fifo
+            TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)      # Get tag lists from the config
             status=
             for tag in $TAGS; do
                 case $line in
-                    $tag*) echo "${line#$tag}" > /tmp/"$tag" ;;
+                    $tag*) echo "${line#$tag}" > /tmp/"$tag" ;; # Match the correct tag with the fifo line
                 esac
+                # These lines are to do with presenation
                 [ -z "$status" ] && read -r status < /tmp/"$tag" && continue
                 read -r newstatus < /tmp/"$tag"
                 status="$status $DELIMITER $newstatus"

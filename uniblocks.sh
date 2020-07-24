@@ -31,17 +31,15 @@ parse() {               # Used for parsing modules into the fifo
 
 scan() { # Used for getting config of the module(s)
     while IFS= read -r line; do
-        case $line in
-            "$1"*) echo "$line" && break ;;
-        esac
-    done < $CONFIG
-}
-
-scan2() { # Used for getting config of the module(s)
-    while IFS= read -r line; do
-        case $line in
-            [[:alnum:]]*) echo "$line" && break ;;
-        esac
+        if [ -n "$1" ]; then
+            case $line in
+                "$1"*) echo "$line" ;;
+            esac
+        else
+            case $line in
+                [[:alnum:]]*) echo "$line" ;;
+            esac
+        fi
     done < $CONFIG
 }
 
@@ -49,7 +47,7 @@ case $1 in
     --gen | -g)
         kill -- $(pgrep -f "$0" | grep -v $$) 2> /dev/null # Bg jobs cleanup
         [ -e "$PANELFIFO" ] || mkfifo "$PANELFIFO"         # Create fifo if it doesn't exist
-        grep -Ev "^#|^$" $CONFIG | parse                   # Parse the modules into the fifo
+        scan | parse                                       # Parse the modules into the fifo
         sleep 1                                            # Give the fifo a little time to process all the module
         trap 'rm -f $PANELFIFO; exit' INT TERM QUIT EXIT   # Setup up trap for cleanup
         while IFS= read -r line; do                        # Parse moudles out from the fifo

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 #
-# Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
-# Dependencies: pgrep, mkfifo, xargs
+# Wraps all of your status bar modules into a single string that updates only the part that has changed.
+# Dependencies: pgrep, xargs, mkfifo
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -13,31 +13,29 @@ cleanup() {
     pgrep -f "$0" | xargs kill -9
 }
 
-parse() {               # Used for parsing modules into the fifo
-    exec 3<> $PANELFIFO # Set File Descriptor for addressing convenience
+parse() { # Used for parsing modules into the fifo
     while read -r line; do
         TEMP=${line#*,}
         SCRIPT=${TEMP%,*}
         TAG=${line%%,*}
         INTERVAL=${line##*,}
         if [ "$TAG" = W ]; then # BSPWM specific
-            $SCRIPT >&3 &
+            $SCRIPT > $PANELFIFO &
         elif [ "$INTERVAL" = 0 ]; then # Static modules
-            echo "$TAG$($SCRIPT)" >&3 &
+            echo "$TAG$($SCRIPT)" > $PANELFIFO &
         else
             while :; do # Dynamic modules
                 echo "$TAG$($SCRIPT)"
                 sleep "$INTERVAL"
-            done >&3 &
+            done > $PANELFIFO &
         fi
     done
-    exec 3<&- # Unset FD
 }
 
 getmodule() {
     while IFS= read -r line; do
         case $line in
-            "$1"*) echo "$line" ;;
+            "$1"*) echo "$line" && break ;;
         esac
     done < $CONFIG
 }

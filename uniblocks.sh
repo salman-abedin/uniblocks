@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
-# Dependencies: awk, grep, pgrep, mkfifo, xargs
+# Dependencies: grep, pgrep, mkfifo, xargs
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -34,27 +34,38 @@ parse() {               # Used for parsing modules into the fifo
     exec 3<&- # Unset FD
 }
 
-scan() { # Used for getting config of the module(s)
+getmodule() {
     while IFS= read -r line; do
-        if [ -n "$1" ]; then
-            case $line in
-                "$1"*) echo "$line" ;;
-            esac
-        else
-            case $line in
-                [[:alnum:]]*) echo "$line" ;;
-            esac
-        fi
+        case $line in
+            "$1"*) echo "$line" ;;
+        esac
+    done < $CONFIG
+}
+
+gettags() {
+    while IFS= read -r line; do
+        case $line in
+            [[:alnum:]]*) echo "${line%%,*}" ;;
+        esac
+    done < $CONFIG
+}
+
+getconfig() {
+    while IFS= read -r line; do
+        case $line in
+            [[:alnum:]]*) echo "$line" ;;
+        esac
     done < $CONFIG
 }
 
 generate() {
-    mkfifo $PANELFIFO                             # Create fifo if it doesn't exist
-    scan | parse                                  # Parse the modules into the fifo
-    sleep 1                                       # Give the fifo a little time to process all the module
-    trap 'cleanup' INT TERM QUIT EXIT             # Setup up trap for cleanup
-    while IFS= read -r line; do                   # Parse moudles out from the fifo
-        TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG) # Get tag lists from the config
+    mkfifo $PANELFIFO                 # Create fifo if it doesn't exist
+    getconfig | parse                 # Parse the modules into the fifo
+    sleep 1                           # Give the fifo a little time to process all the module
+    trap 'cleanup' INT TERM QUIT EXIT # Setup up trap for cleanup
+    while IFS= read -r line; do       # Parse moudles out from the fifo
+        TAGS=$(gettags)               # Get tag lists from the config
+        # TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG) # Get tag lists from the config
         status=
         for tag in $TAGS; do
             case $line in
@@ -71,5 +82,5 @@ generate() {
 
 case $1 in
     --gen | -g) generate ;;
-    --update | -u) [ -e $PANELFIFO ] && scan "$2" | parse ;;
+    --update | -u) [ -e $PANELFIFO ] && getmodule "$2" | parse ;;
 esac

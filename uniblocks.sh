@@ -35,7 +35,7 @@ case $1 in
         [ -p "$PANELFIFO" ] || mkfifo "$PANELFIFO"         # Create fifo if it doesn't exist
         grep -Ev "^#|^$" $CONFIG | parse                   # Parse the modules into the fifo
         sleep 1                                            # Give the fifo a little time to process all the module
-        trap 'rm -f $PANELFIFO; exit' INT                  # Setup up trap for cleanup
+        trap 'rm -f $PANELFIFO; exit' INT TERM QUIT EXIT   # Setup up trap for cleanup
         while IFS= read -r line; do                        # Parse moudles out from the fifo
             TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG)      # Get tag lists from the config
             status=

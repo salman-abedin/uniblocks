@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed.
 # Dependencies: pgrep, xargs, mkfifo

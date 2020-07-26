@@ -14,7 +14,7 @@ cleanup() {
 }
 
 parse() { # Used for parsing modules into the fifo
-    while read -r line; do
+    while IFS= read -r line; do
         TEMP=${line#*,}
         SCRIPT=${TEMP%,*}
         TAG=${line%%,*}

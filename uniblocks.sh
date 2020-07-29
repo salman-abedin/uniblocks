@@ -69,7 +69,7 @@ generate() {
             case $line in
                 $tag*) echo "${line#$tag}" > /tmp/"$tag" ;; # Match the correct tag with the fifo line
             esac
-            # These lines are to do with presenation
+            # These lines are to do with the presenation
             [ -z "$status" ] && read -r status < /tmp/"$tag" && continue
             read -r newstatus < /tmp/"$tag"
             status="$status $DELIMITER $newstatus"

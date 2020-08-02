@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed.
-# Dependencies: pgrep, xargs, mkfifo
+# Dependencies: pgrep, xargs, mkfifo, sleep
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -34,7 +34,7 @@ parse() { # Used for parsing modules into the fifo
         else
             while :; do # Dynamic modules
                 echo "$TAG$($SCRIPT)"
-                nap "$INTERVAL"
+                sleep "$INTERVAL"
             done > $PANELFIFO &
         fi
     done
@@ -67,7 +67,7 @@ getconfig() {
 generate() {
     mkfifo $PANELFIFO                 # Create fifo if it doesn't exist
     getconfig | parse                 # Parse the modules into the fifo
-    nap 1                             # Give the fifo a little time to process all the module
+    sleep 1                           # Give the fifo a little time to process all the module
     trap 'cleanup' INT TERM QUIT EXIT # Setup up trap for cleanup
     while IFS= read -r line; do       # Parse moudles out from the fifo
         TAGS=$(gettags)               # Get tag lists from the config

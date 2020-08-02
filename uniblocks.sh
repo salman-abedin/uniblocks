@@ -34,7 +34,7 @@ parse() { # Used for parsing modules into the fifo
         else
             while :; do # Dynamic modules
                 echo "$TAG$($SCRIPT)"
-                sleep "$INTERVAL"
+                nap "$INTERVAL"
             done > $PANELFIFO &
         fi
     done
@@ -67,7 +67,7 @@ getconfig() {
 generate() {
     mkfifo $PANELFIFO                 # Create fifo if it doesn't exist
     getconfig | parse                 # Parse the modules into the fifo
-    sleep 1                           # Give the fifo a little time to process all the module
+    nap 1                             # Give the fifo a little time to process all the module
     trap 'cleanup' INT TERM QUIT EXIT # Setup up trap for cleanup
     while IFS= read -r line; do       # Parse moudles out from the fifo
         TAGS=$(gettags)               # Get tag lists from the config

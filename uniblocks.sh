@@ -63,7 +63,6 @@ generate() {
     trap 'cleanup' INT TERM QUIT EXIT # Setup up trap for cleanup
     while IFS= read -r line; do       # Parse moudles out from the fifo
         TAGS=$(gettags)               # Get tag lists from the config
-        # TAGS=$(awk -F, '/^\w/{print $1}' $CONFIG) # Get tag lists from the config
         status=
         for tag in $TAGS; do
             case $line in

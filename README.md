@@ -23,6 +23,16 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo make install
 ```
 
+## Patches
+
+-  **dwm status support**.
+
+```sh
+cd uniblocks
+patch < dwm.diff    # Add the feature
+patch -R < dwm.diff # Remove the feature
+```
+
 ## Usage
 
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
@@ -36,6 +46,7 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 ## Uninstallation
 
 ```sh
+cd uniblocks
 sudo make uninstall
 ```
 

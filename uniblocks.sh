@@ -6,7 +6,7 @@
 
 PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
-DELIMITER="|"
+DELIMITER=" | "
 
 cleanup() {
    rm -f $PANELFIFO

@@ -4,18 +4,20 @@
 
 # Uniblocks: Universal updatable status bar module generator
 
-Uniblocks wraps all of your status bar modules into a single string that updates only the part that has changed. This string can be used with any status bar application since Uniblocks itself handles all the updating.
+Uniblocks wraps all of your status bar modules into a single string that updates only the part that has changed.  
+This string can be used with any status bar application since Uniblocks itself handles all the updating.
 
 ## Features
 
 -  The modules can be updated without the status bar's interventions
 -  Updating is possible both periodically and manually
 -  Different modules can be updated at different intervals
--  Runs as fast as it gets. (hint: ~75 Lines of POSIX shell scripting with FIFO)
+-  Can be used with any status bar application
+-  Tiny & fast ( hint: ~80 lines of POSIX shellscript with only sleep calls)
 
 ## Dependencies
 
--  pgrep, xargs, mkfifo, sleep
+-  mkfifo, sleep
 
 ## Installation
 
@@ -29,19 +31,26 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 
 ```sh
 cd uniblocks
-patch < dwm.diff    # Add the feature
-patch -R < dwm.diff # Remove the feature
+patch < uniblocks-dwm-10.0.diff    # Add the feature
+patch -R < uniblocks-dwm-10.0.diff # Remove the feature
+sudo make install                  # Reinstall
 ```
 
 ## Usage
 
--  Create a **~/.config/uniblocksrc** file for configuring the modules.
-   Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
+-  Modify the config section of the script for your modules and reinstall afterwards
 
 | Command                       | Effect                                                                   |
 | ----------------------------- | ------------------------------------------------------------------------ |
 | `uniblocks --gen,-g`          | Prints the status string to standard out (The config dictates the order) |
 | `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. The volume module)              |
+
+## Update
+
+```sh
+cd devour
+git pull --no-rebase && sudo make install
+```
 
 ## Uninstallation
 

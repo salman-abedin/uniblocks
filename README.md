@@ -14,7 +14,7 @@ Uniblocks wraps all of your status bar modules into a single string that updates
 
 ## Dependencies
 
--  pgrep, xargs, mkfifo, sleep
+-  mkfifo, sleep
 
 ## Installation
 

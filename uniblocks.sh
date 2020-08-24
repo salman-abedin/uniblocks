@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Wraps all of your status bar modules into a single string that updates only the part that has changed.
-# Dependencies: pgrep, xargs, mkfifo, sleep
+# Dependencies: mkfifo, sleep
 # Usage: uniblocks -[g,u]
 
 PANELFIFO=/tmp/panel_fifo
@@ -10,7 +10,7 @@ DELIMITER=" | "
 
 cleanup() {
    rm -f $PANELFIFO
-   pgrep -f "$0" | xargs kill -9
+   kill 0
 }
 
 parse() { # Used for parsing modules into the fifo

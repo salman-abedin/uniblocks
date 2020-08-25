@@ -1,11 +1,11 @@
---- uniblocks.sh	2020-08-24 19:41:51.794236070 +0600
-+++ uniblocks.sh	2020-08-24 19:42:03.048236747 +0600
-@@ -74,7 +74,7 @@
+--- uniblocks.sh	2020-08-26 02:37:52.164390089 +0600
++++ uniblocks.sh	2020-08-26 02:38:14.592388510 +0600
+@@ -71,7 +71,7 @@
           read -r newstatus < /tmp/"$tag"
           status="$status $DELIMITER $newstatus"
        done
 -      printf "\r%s" "$status" # Print the result
 +      xsetroot -name "$status" # Print the result
-    done < $PANELFIFO
+    done < $PANEL_FIFO
  }
  

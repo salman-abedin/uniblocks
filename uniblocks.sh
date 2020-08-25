@@ -4,7 +4,7 @@
 # Dependencies: mkfifo, sleep
 # Usage: uniblocks -[g,u]
 
-PANELFIFO=/tmp/panel_fifo
+PANELFIFO=/tmp/panel_fifo2
 CONFIG=~/.config/uniblocksrc
 DELIMITER=" | "
 
@@ -52,9 +52,9 @@ getconfig() {
 }
 
 generate() {
-   mkfifo $PANELFIFO # Create fifo if it doesn't exist
-   getconfig | parse # Parse the modules into the fifo
-   sleep 1           # Give the fifo a little time to process all the module
+   mkfifo $PANELFIFO 2> /dev/null # Create fifo if it doesn't exist
+   getconfig | parse              # Parse the modules into the fifo
+   sleep 1                        # Give the fifo a little time to process all the module
 
    trap 'kill 0' INT TERM QUIT EXIT # Setup up trap for cleanup
    while IFS= read -r line; do      # Parse moudles out from the fifo
@@ -69,7 +69,7 @@ generate() {
          read -r newstatus < /tmp/"$tag"
          status="$status $DELIMITER $newstatus"
       done
-      printf "%s\r" "$status" # Print the result
+      printf "\r%s" "$status" # Print the result
    done < $PANELFIFO
 }
 

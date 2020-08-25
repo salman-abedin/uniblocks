@@ -30,8 +30,8 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 
 ```sh
 cd uniblocks
-patch < dwm.diff    # Add the feature
-patch -R < dwm.diff # Remove the feature
+patch < uniblocks-dwm-10.0.diff    # Add the feature
+patch -R < uniblocks-dwm-10.0.diff # Remove the feature
 ```
 
 ## Usage

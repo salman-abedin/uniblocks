@@ -8,11 +8,6 @@ PANELFIFO=/tmp/panel_fifo
 CONFIG=~/.config/uniblocksrc
 DELIMITER=" | "
 
-cleanup() {
-   rm -f $PANELFIFO
-   kill 0
-}
-
 parse() { # Used for parsing modules into the fifo
    while IFS= read -r line; do
       TEMP=${line#*,}
@@ -61,9 +56,9 @@ generate() {
    getconfig | parse # Parse the modules into the fifo
    sleep 1           # Give the fifo a little time to process all the module
 
-   trap 'cleanup' INT TERM QUIT EXIT # Setup up trap for cleanup
-   while IFS= read -r line; do       # Parse moudles out from the fifo
-      TAGS=$(gettags)                # Get tag lists from the config
+   trap 'kill 0' INT TERM QUIT EXIT # Setup up trap for cleanup
+   while IFS= read -r line; do      # Parse moudles out from the fifo
+      TAGS=$(gettags)               # Get tag lists from the config
       status=
       for tag in $TAGS; do
          case $line in

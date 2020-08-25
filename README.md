@@ -32,6 +32,7 @@ git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo
 cd uniblocks
 patch < uniblocks-dwm-10.0.diff    # Add the feature
 patch -R < uniblocks-dwm-10.0.diff # Remove the feature
+sudo make install                  # Reinstall
 ```
 
 ## Usage

@@ -38,7 +38,7 @@ sudo make install                  # Reinstall
 ## Usage
 
 -  Create a **~/.config/uniblocksrc** file for configuring the modules.
-   Here is an [examples](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
+   Here is an [example](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
 
 | Command                       | Effect                                                                   |
 | ----------------------------- | ------------------------------------------------------------------------ |

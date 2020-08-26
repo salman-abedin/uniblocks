@@ -13,6 +13,7 @@ This string can be used with any status bar application since Uniblocks itself h
 -  Updating is possible both periodically and manually
 -  Different modules can be updated at different intervals
 -  Can be used with any status bar application
+-  Tiny & fast
 
 ## Dependencies
 

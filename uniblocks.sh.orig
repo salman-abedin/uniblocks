@@ -3,14 +3,13 @@
 # Wraps all of your status bar modules into a single string
 #     that updates only the part that has changed.
 # Dependencies: mkfifo, sleep
-# Usage: uniblocks -g
-#        uniblocks -u <Tag>
+# Usage: uniblocks -[g,u]
 
 #===============================================================================
 #                             Config
 #===============================================================================
 
-# Module Format = Tag,Script,Interval (in second)
+# Module Format = Tag,Script,Interval(in second)
 # 0 for manually updated modules
 # ❗ No extra whitespaces
 CONFIG="\
@@ -82,7 +81,7 @@ generate() {
          read -r newstatus < /tmp/"$tag"
          status="$status $DELIMITER $newstatus"
       done
-      xsetroot -name "$status" # Print the result
+      printf "\r%s" "$status" # Print the result
    done < $PANEL_FIFO
 }
 

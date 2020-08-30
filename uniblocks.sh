@@ -11,7 +11,7 @@
 #===============================================================================
 
 # Module Format = Tag,Script,Interval (in second)
-# 0 for manually updated modules
+# '0' for manually updated modules
 # ❗ No extra whitespaces
 CONFIG="\
 sys,panel -s,3;

@@ -82,7 +82,7 @@ generate() {
          read -r newstatus < /tmp/"$tag"
          status="$status $DELIMITER $newstatus"
       done
-      xsetroot -name "$status" # Print the result
+      printf "\r%s" "$status" # Print the result
    done < $PANEL_FIFO
 }
 

@@ -38,8 +38,7 @@ sudo make install                  # Reinstall
 
 ## Usage
 
--  Create a **~/.config/uniblocksrc** file for configuring the modules.
-   Here is an [example](https://github.com/salman-abedin/uniblocks/blob/master/example_config)
+-  Modify the config section of the script for your modules and reinstall afterwards
 
 | Command                       | Effect                                                                   |
 | ----------------------------- | ------------------------------------------------------------------------ |

@@ -5,9 +5,26 @@
 # Dependencies: mkfifo, sleep
 # Usage: uniblocks -[g,u]
 
+#===============================================================================
+#                             Config
+#===============================================================================
+
+# Module Format = Tag,Script,Interval(in second)
+# 0 for manually updated modules
+# ❗ No extra whitespaces
+CONFIG="\
+sys,panel -s,3;
+vol,panel -v,0;
+wifi,panel -w,30;
+dt,panel -d,60;
+"
+DELIMITER="   "
+
+#===============================================================================
+#                             Script
+#===============================================================================
+
 PANEL_FIFO=/tmp/panel_fifo2
-CONFIG=~/.config/uniblocksrc
-DELIMITER=" | "
 
 parse() { # Used for parsing modules into the fifo
    while IFS= read -r line; do
@@ -28,38 +45,31 @@ parse() { # Used for parsing modules into the fifo
    done
 }
 
-get_module() {
-   while IFS= read -r line; do
-      case $line in
-         "$1"*) echo "$line" && break ;;
-      esac
-   done < $CONFIG
-}
-
-get_tags() {
-   while IFS= read -r line; do
-      case $line in
-         [[:alnum:]]*) echo "${line%%,*}" ;;
-      esac
-   done < $CONFIG
-}
-
 get_config() {
-   while IFS= read -r line; do
-      case $line in
-         [[:alnum:]]*) echo "$line" ;;
+   CURRENT_IFS=$IFS
+   IFS=$(printf ';')
+   for line in $CONFIG; do
+      case $1 in
+         -a) printf "%s" "$line" ;;
+         -t) printf "%s" "${line%%,*}" ;;
+         -m)
+            case $line in
+               *"$2"*) echo "${line#${line%%[![:space:]]*}}" && break ;;
+            esac
+            ;;
       esac
-   done < $CONFIG
+   done
+   IFS=$CURRENT_IFS
 }
 
 generate() {
    mkfifo $PANEL_FIFO 2> /dev/null # Create fifo if it doesn't exist
-   get_config | parse              # Parse the modules into the fifo
+   get_config -a | parse           # Parse the modules into the fifo
    sleep 1                         # Give the fifo a little time to process all the module
 
    trap 'kill 0' INT TERM QUIT EXIT # Setup up trap for cleanup
    while IFS= read -r line; do      # Parse moudles out from the fifo
-      TAGS=$(get_tags)              # Get tag lists from the config
+      TAGS=$(get_config -t)         # Get tag lists from the config
       status=
       for tag in $TAGS; do
          case $line in
@@ -77,5 +87,5 @@ generate() {
 
 case $1 in
    --gen | -g) generate ;;
-   --update | -u) [ -e $PANEL_FIFO ] && get_module "$2" | parse ;;
+   --update | -u) [ -e $PANEL_FIFO ] && get_config -m "$2" | parse ;;
 esac

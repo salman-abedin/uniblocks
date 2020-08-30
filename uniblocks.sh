@@ -3,14 +3,15 @@
 # Wraps all of your status bar modules into a single string
 #     that updates only the part that has changed.
 # Dependencies: mkfifo, sleep
-# Usage: uniblocks -[g,u]
+# Usage: uniblocks -g
+#        uniblocks -u <Tag>
 
 #===============================================================================
 #                             Config
 #===============================================================================
 
-# Module Format = Tag,Script,Interval(in second)
-# 0 for manually updated modules
+# Module Format = Tag,Script,Interval (in second)
+# '0' for manually updated modules
 # ❗ No extra whitespaces
 CONFIG="\
 sys,panel -s,3;
@@ -63,13 +64,12 @@ get_config() {
 }
 
 generate() {
+   TAGS=$(get_config -t)           # Get tag lists from the config
    mkfifo $PANEL_FIFO 2> /dev/null # Create fifo if it doesn't exist
    get_config -a | parse           # Parse the modules into the fifo
-   sleep 1                         # Give the fifo a little time to process all the module
 
    trap 'kill 0' INT TERM QUIT EXIT # Setup up trap for cleanup
    while IFS= read -r line; do      # Parse moudles out from the fifo
-      TAGS=$(get_config -t)         # Get tag lists from the config
       status=
       for tag in $TAGS; do
          case $line in

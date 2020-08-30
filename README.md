@@ -2,7 +2,7 @@
 
 ![](screenshot.png)
 
-# Uniblocks: Universal updatable status bar module generator
+# Uniblocks: Universal updatable status bar module manager
 
 Uniblocks wraps all of your status bar modules into a single string that updates only the part that has changed.  
 This string can be used with any status bar application since Uniblocks itself handles all the updating.
@@ -48,7 +48,7 @@ sudo make install                  # Reinstall
 ## Update
 
 ```sh
-cd devour
+cd uniblocks
 git pull --no-rebase && sudo make install
 ```
 
@@ -69,7 +69,7 @@ sudo make uninstall
 | [bolt](https://github.com/salman-abedin/bolt)                                | The launcher wrapper            |
 | [tide](https://github.com/salman-abedin/puri)                                | Minimal Transmission CLI client |
 | [puri](https://github.com/salman-abedin/puri)                                | Minimal URL launcher            |
-| [devour](https://github.com/salman-abedin/devour)                            | Terminal swallowing             |
+| [devour](https://github.com/salman-abedin/devour)                            | X11 window swallower            |
 | [crystal](https://github.com/salman-abedin/crystal)                          | The transparent setup           |
 | [Magpie](https://github.com/salman-abedin/magpie)                            | The dotfiles                    |
 | [Alfred](https://github.com/salman-abedin/alfred)                            | The scripts                     |

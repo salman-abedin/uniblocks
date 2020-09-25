@@ -46,6 +46,8 @@ parse() { # Used for parsing modules into the fifo
    done
 }
 
+
+
 get_config() {
    CURRENT_IFS=$IFS
    IFS=$(printf ';')
@@ -68,8 +70,8 @@ generate() {
    mkfifo $PANEL_FIFO 2> /dev/null # Create fifo if it doesn't exist
    get_config -a | parse           # Parse the modules into the fifo
 
-   trap 'kill 0' INT TERM QUIT EXIT # Setup up trap for cleanup
-   while IFS= read -r line; do      # Parse moudles out from the fifo
+   trap 'pkill -P $$; exit' INT TERM QUIT EXIT # Setup up trap for cleanup
+   while IFS= read -r line; do                 # Parse moudles out from the fifo
       status=
       for tag in $TAGS; do
          case $line in

@@ -49,7 +49,7 @@ sudo make install                  # Reinstall
 
 ```sh
 cd uniblocks
-git pull --no-rebase && sudo make install
+git pull rebase && sudo make install
 ```
 
 ## Uninstallation

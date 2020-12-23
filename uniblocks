@@ -2,30 +2,17 @@
 #
 # Wraps all of your status bar modules into a single string
 #     that updates only the part that has changed.
+#
 # Dependencies: mkfifo, sleep
+#
 # Usage: uniblocks -g
 #        uniblocks -u <Tag>
 
-#===============================================================================
-#                             Config
-#===============================================================================
-
-# Module Format = Tag,Script,Interval (in second)
-# '0' for manually updated modules
-# ❗ No extra whitespaces
-CONFIG="\
-sys,panel -s,3;
-vol,panel -v,0;
-wifi,panel -w,30;
-dt,panel -d,60;
-"
-DELIMITER="   "
-
-#===============================================================================
-#                             Script
-#===============================================================================
-
 PANEL_FIFO=/tmp/panel_fifo2
+CONFIG=~/.config/uniblocksrc
+
+# shellcheck source=/dev/null
+. $CONFIG
 
 parse() { # Used for parsing modules into the fifo
    while IFS= read -r line; do
@@ -45,8 +32,6 @@ parse() { # Used for parsing modules into the fifo
       fi
    done
 }
-
-
 
 get_config() {
    CURRENT_IFS=$IFS
@@ -69,6 +54,7 @@ generate() {
    TAGS=$(get_config -t)           # Get tag lists from the config
    mkfifo $PANEL_FIFO 2> /dev/null # Create fifo if it doesn't exist
    get_config -a | parse           # Parse the modules into the fifo
+   sleep 1;                        # Let the modules load properly
 
    trap 'pkill -P $$; exit' INT TERM QUIT EXIT # Setup up trap for cleanup
    while IFS= read -r line; do                 # Parse moudles out from the fifo
@@ -83,7 +69,7 @@ generate() {
          read -r newstatus < /tmp/"$tag"
          status="$status $DELIMITER $newstatus"
       done
-      printf "\r%s" "$status" # Print the result
+      display "$status"
    done < $PANEL_FIFO
 }
 

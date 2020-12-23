@@ -1,55 +1,46 @@
-![](preview.gif)
-
-![](screenshot.png)
-
-# Uniblocks: Universal updatable status bar module manager
+# Uniblocks: Status bar agnostic module generator
 
 Uniblocks wraps all of your status bar modules into a single string that updates only the part that has changed.  
 This string can be used with any status bar application since Uniblocks itself handles all the updating.
 
+![](https://gitlab.com/salman-abedin/assets/-/raw/master/uniblocks.gif)
+
+![](https://gitlab.com/salman-abedin/assets/-/raw/master/uniblocks_bar.png)
+
 ## Features
 
--  The modules can be updated without the status bar's interventions
--  Updating is possible both periodically and manually
--  Different modules can be updated at different intervals
--  Can be used with any status bar application
--  Tiny & fast ( hint: ~80 lines of POSIX shellscript with only sleep calls)
+- The modules can be updated without the status bar's interventions
+- Updating is possible both periodically and manually
+- Different modules can be updated at different intervals
+- Can be used with any status bar application
+- Tiny & fast ( hint: ~80 lines of POSIX shellscript with only sleep calls)
 
 ## Dependencies
 
--  mkfifo, sleep
+- mkfifo, sleep
 
 ## Installation
 
 ```sh
-git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && sudo make install
-```
-
-## Patches
-
--  **dwm status support**.
-
-```sh
-cd uniblocks
-patch < uniblocks-dwm-10.0.diff    # Add the feature
-patch -R < uniblocks-dwm-10.0.diff # Remove the feature
-sudo make install                  # Reinstall
+git clone https://github.com/salman-abedin/uniblocks.git && cd uniblocks && make && sudo make install
 ```
 
 ## Usage
 
--  Modify the config section of the script for your modules and reinstall afterwards
+- Modify `~/.config/uniblocksrc` according to your particular status bar setup.
 
-| Command                       | Effect                                                                   |
-| ----------------------------- | ------------------------------------------------------------------------ |
-| `uniblocks --gen,-g`          | Prints the status string to standard out (The config dictates the order) |
-| `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. The volume module)              |
+- Script belows commands as necessary.
+
+| Command                       | Effect                                                      |
+| ----------------------------- | ----------------------------------------------------------- |
+| `uniblocks --gen,-g`          | Prints the status string according to the config            |
+| `uniblocks --update,-u <TAG>` | Manually updates individual module (e.g. The volume module) |
 
 ## Update
 
 ```sh
 cd uniblocks
-git pull rebase && sudo make install
+git pull --no-rebase && sudo make install
 ```
 
 ## Uninstallation
@@ -66,6 +57,7 @@ sudo make uninstall
 | Name                                                                         | Description                     |
 | ---------------------------------------------------------------------------- | ------------------------------- |
 | [Alfred/panel](https://github.com/salman-abedin/alfred/blob/master/panel.sh) | The status bar modules          |
+| [faint](https://github.com/salman-abedin/faint)                              | The launcher wrapper            |
 | [bolt](https://github.com/salman-abedin/bolt)                                | The launcher wrapper            |
 | [tide](https://github.com/salman-abedin/puri)                                | Minimal Transmission CLI client |
 | [puri](https://github.com/salman-abedin/puri)                                | Minimal URL launcher            |

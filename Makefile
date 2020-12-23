@@ -1,16 +1,16 @@
 .POSIX:
-BIN_DIR = /usr/local/bin
+DIR_BIN = /usr/local/bin
+CONFIG = uniblocksrc
+SCRIPT = $(shell grep -l "^#\!" ./* | sed 's/.\///')
+init:
+	@[ -f ~/.config/$(CONFIG) ] || cp $(CONFIG) ~/.config
+	@echo Initiation finished.
 install:
-	@mkdir -p $(BIN_DIR)
-	@for e in *.sh; do \
-		cp -f $$e $${e%.*}; \
-		chmod 755 $${e%.*}; \
-		mv $${e%.*} $(BIN_DIR); \
-		done
-	@echo Done installing executable files to $(BIN_DIR)
+	@mkdir -p $(DIR_BIN)
+	@cp -f $(SCRIPT) $(DIR_BIN)
+	@chmod 755 $(DIR_BIN)/${SCRIPT}
+	@echo Installation finished.
 uninstall:
-	@for e in *.sh;do \
-		rm -f $(BIN_DIR)/$${e%.*}; \
-		done
-	@echo Done removing executable files from $(BIN_DIR)
-.PHONY: install uninstall
+	@rm -f $(DIR_BIN)/$(SCRIPT)
+	@echo Uninstallation finished.
+.PHONY: init install uninstall

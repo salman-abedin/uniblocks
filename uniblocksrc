@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# Config file for uniblocks
+
+DELIMITER="      "
+
+display() {
+   # $1 is the status string
+   xsetroot -name "$1" # For dwm
+}
+
+#===============================================================================
+# Format: TAG,SCRIPT,INTERVAL (In second)
+# Note: Use 0 as interval for manually updated modules
+#===============================================================================
+CONFIG="\
+sys,panel -s,3;
+vol,panel -v,0;
+mail,panel -m,0;
+wifi,panel -w,30;
+dt,panel -d,60;
+"
